@@ -1,0 +1,7 @@
+{
+  "workspaces": [
+    { "id": "thame-2024", "name": "Thame GLOF 2024", "subtitle": "Solukhumbu, Nepal" },
+    { "id": "sandbox", "name": "Interface sandbox (placeholder + synthetic)" },
+    { "id": "blank", "name": "Blank workspace (bring your own data)" }
+  ]
+}

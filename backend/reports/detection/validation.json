@@ -1,0 +1,134 @@
+{
+  "n_rows": 3519,
+  "n_columns": 43,
+  "mode": "detection",
+  "provenance": "SYNTHETIC",
+  "issues": [
+    {
+      "level": "warning",
+      "check": "provenance",
+      "column": null,
+      "message": "Dataset is SYNTHETIC. Results must not be interpreted as real event results."
+    },
+    {
+      "level": "info",
+      "check": "imbalance",
+      "column": null,
+      "message": "Class imbalance: positive rate 11.03% (handled with class weights)."
+    }
+  ],
+  "missing_columns": [],
+  "extra_columns": [],
+  "missingness": {
+    "vv_backscatter_db": 0.25262858766695084,
+    "vh_backscatter_db": 0.25262858766695084,
+    "hh_backscatter_db": 0.7473714123330492,
+    "hv_backscatter_db": 0.7473714123330492,
+    "sar_coherence": 0.09775504404660415,
+    "backscatter_difference_db": 0.0,
+    "incidence_angle_deg": 0.0,
+    "los_displacement_mm": 0.17647058823529413,
+    "acquisition_date": 0.0,
+    "orbit_direction": 0.0,
+    "polarization": 0.0,
+    "elevation_m": 0.009946007388462632,
+    "slope_deg": 0.009946007388462632,
+    "aspect_deg": 0.009946007388462632,
+    "curvature": 0.009946007388462632,
+    "twi": 0.009946007388462632,
+    "distance_to_river_m": 0.0,
+    "distance_to_road_m": 0.02500710429099176,
+    "rainfall_1d_mm": 0.0,
+    "rainfall_3d_mm": 0.0,
+    "rainfall_7d_mm": 0.0,
+    "rainfall_30d_mm": 0.029838022165387893,
+    "soil_moisture": 0.06876953680022733,
+    "ndvi": 0.12986643932935493,
+    "land_cover": 0.008240977550440466,
+    "geology": 0.0,
+    "landslide_label": 0.0,
+    "landslide_severity": 0.0,
+    "landslide_area_m2": 0.0,
+    "landslide_displacement_m": 0.0,
+    "change_classification": 0.0,
+    "sample_id": 0.0,
+    "event_id": 0.0,
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "event_date": 0.0,
+    "satellite_mission": 0.0,
+    "product_type": 0.0,
+    "inventory_source": 0.0,
+    "label_confidence": 0.0,
+    "data_quality_flag": 0.0,
+    "train_test_group": 0.0,
+    "data_provenance": 0.0
+  },
+  "target_distribution": {
+    "0": 3131,
+    "1": 388
+  },
+  "group_distribution": {
+    "SYN-EVT-01": {
+      "n": 487,
+      "positives": 58,
+      "positive_rate": 0.11909650924024641,
+      "split": "test"
+    },
+    "SYN-EVT-02": {
+      "n": 484,
+      "positives": 78,
+      "positive_rate": 0.16115702479338842,
+      "split": "train"
+    },
+    "SYN-EVT-03": {
+      "n": 510,
+      "positives": 99,
+      "positive_rate": 0.19411764705882353,
+      "split": "train"
+    },
+    "SYN-EVT-04": {
+      "n": 475,
+      "positives": 62,
+      "positive_rate": 0.13052631578947368,
+      "split": "train"
+    },
+    "SYN-EVT-05": {
+      "n": 413,
+      "positives": 22,
+      "positive_rate": 0.053268765133171914,
+      "split": "train"
+    },
+    "SYN-EVT-06": {
+      "n": 325,
+      "positives": 16,
+      "positive_rate": 0.04923076923076923,
+      "split": "test"
+    },
+    "SYN-EVT-07": {
+      "n": 445,
+      "positives": 37,
+      "positive_rate": 0.08314606741573034,
+      "split": "train"
+    },
+    "SYN-EVT-08": {
+      "n": 380,
+      "positives": 16,
+      "positive_rate": 0.042105263157894736,
+      "split": "train"
+    }
+  },
+  "split_distribution": {
+    "test": {
+      "n": 812,
+      "positives": 74
+    },
+    "train": {
+      "n": 2707,
+      "positives": 314
+    }
+  },
+  "ok": true,
+  "n_errors": 0,
+  "n_warnings": 1
+}

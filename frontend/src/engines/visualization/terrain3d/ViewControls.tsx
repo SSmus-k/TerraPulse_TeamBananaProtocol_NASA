@@ -1,0 +1,43 @@
+import type { ShadingMode } from "../../data/terrainTypes";
+
+interface ViewControlsProps {
+  exaggeration: number;
+  onExaggeration: (v: number) => void;
+  shading: ShadingMode;
+  onShading: (s: ShadingMode) => void;
+  onReset: () => void;
+}
+
+const MODES: { id: ShadingMode; label: string }[] = [
+  { id: "hypsometric", label: "Elevation" },
+  { id: "hillshade", label: "Hillshade" },
+  { id: "slope", label: "Slope" },
+];
+
+export function ViewControls({ exaggeration, onExaggeration, shading, onShading, onReset }: ViewControlsProps) {
+  return (
+    <div className="view-controls">
+      <div className="seg" role="radiogroup" aria-label="Terrain shading">
+        {MODES.map((m) => (
+          <button key={m.id} role="radio" aria-checked={shading === m.id}
+            className={shading === m.id ? "is-active" : ""} onClick={() => onShading(m.id)}>
+            {m.label}
+          </button>
+        ))}
+      </div>
+      <label className="view-controls__slider">
+        <span>Vertical exaggeration <b>×{exaggeration.toFixed(1)}</b></span>
+        <input type="range" min={0.5} max={4} step={0.1} value={exaggeration}
+          onChange={(e) => onExaggeration(Number(e.target.value))} />
+      </label>
+      <button className="btn-ghost" onClick={onReset} title="Reset camera">
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M2.5 2.5v3.8h3.8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        Reset view
+      </button>
+      <p className="view-controls__hint">Drag to rotate · Right-drag to pan · Scroll to zoom</p>
+    </div>
+  );
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": "Map headers in the real CSV (keys) to TerraPulse schema names (values). Keys starting with '_' are ignored.",
+  "VV_dB": "vv_backscatter_db",
+  "VH_dB": "vh_backscatter_db",
+  "Coherence": "sar_coherence",
+  "DEM_m": "elevation_m",
+  "Slope": "slope_deg",
+  "LS_label": "landslide_label",
+  "Event": "event_id"
+}

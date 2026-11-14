@@ -1,0 +1,7 @@
+{
+  "planted_changes": {
+    "fan_pixels_+6dB": 1300,
+    "lake_pixels_-8dB": 822
+  },
+  "note": "SYNTHETIC fixtures over open ocean (UTM 45N). Not real data."
+}

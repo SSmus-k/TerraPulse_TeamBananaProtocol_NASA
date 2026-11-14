@@ -1,0 +1,77 @@
+{
+  "id": "thame-2024",
+  "name": "Thame GLOF 2024",
+  "subtitle": "Thame valley, Solukhumbu, Nepal · cascading glacial lake outburst, 16 Aug 2024",
+  "description": "Showcase workspace. Reported evidence is loaded; satellite rasters (DEM, Sentinel-1, NISAR) and mapped footprints are listed under 'Awaiting data' with instructions.",
+  "region": {
+    "name": "Thame valley, Solukhumbu, Nepal",
+    "center": [86.649, 27.832],
+    "zoom": 12,
+    "centerNote": "Map centre is the approximate location of Thame village; no event geometry is drawn until mapped footprints are added."
+  },
+  "terrain": "dem",
+  "datasets": [
+    {
+      "id": "evidence",
+      "name": "Event evidence workbook",
+      "format": "table-json",
+      "url": "thame_evidence.json",
+      "provenance": "observed",
+      "description": "Lake areas, drained volumes, timing, climate context, impacts, flow-model scenarios, scene inventory and caveats, transcribed from published sources."
+    },
+    {
+      "id": "dem",
+      "name": "Copernicus DEM GLO-30",
+      "kind": "dem",
+      "format": "geotiff",
+      "url": null,
+      "provenance": "real-satellite",
+      "howTo": "Download the Copernicus GLO-30 tile covering Thame (N27 E086) e.g. via OpenTopography or the AWS open-data bucket, clip to the valley, save as dem_glo30.tif in frontend/public/workspaces/thame-2024/ and set \"url\": \"dem_glo30.tif\" here."
+    },
+    {
+      "id": "s1-before",
+      "name": "Sentinel-1 RTC (before event)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": null,
+      "provenance": "real-satellite",
+      "howTo": "In ASF Vertex, find a Sentinel-1 IW scene over Thame acquired shortly BEFORE 16 Aug 2024, order an RTC product via HyP3 (free Earthdata login), and add the VV GeoTIFF here with its acquisition date."
+    },
+    {
+      "id": "s1-after",
+      "name": "Sentinel-1 RTC (after event)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": null,
+      "provenance": "real-satellite",
+      "howTo": "Same orbit/track as the 'before' scene, acquired AFTER 16 Aug 2024 (the evidence workbook lists a 19 Aug 2024 Sentinel-1 acquisition used by Sentinel Asia). Process with HyP3 RTC using the same settings, add the VV GeoTIFF with its date, then run 'Detect change'."
+    },
+    {
+      "id": "nisar",
+      "name": "NISAR L-band scene (2025–2026)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": null,
+      "provenance": "real-satellite",
+      "howTo": "NISAR launched in 2025, so it cannot show the 2024 event itself. Search ASF Vertex for NISAR GCOV products over Thame to show the valley's current state; coverage for this location still needs to be checked."
+    },
+    {
+      "id": "unosat-scars",
+      "name": "UNOSAT landslide/mudslide scars",
+      "kind": "vector",
+      "format": "geojson",
+      "url": null,
+      "provenance": "observed",
+      "howTo": "UNOSAT product LS20240818NPL (preliminary, not field-validated, ~140 ha). If the GIS layer is available, convert it to GeoJSON (WGS84) and add it here."
+    },
+    {
+      "id": "alos2-flood",
+      "name": "JAXA ALOS-2 flood proxy map",
+      "kind": "vector",
+      "format": "geojson",
+      "url": null,
+      "provenance": "observed",
+      "howTo": "Sentinel Asia lists a shapefile set for the 24 Aug 2024 ALOS-2 flood proxy map. Convert to GeoJSON (WGS84) and add it here."
+    }
+  ]
+}

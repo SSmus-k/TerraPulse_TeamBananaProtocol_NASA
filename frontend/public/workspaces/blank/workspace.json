@@ -1,0 +1,7 @@
+{
+  "id": "blank",
+  "name": "Blank workspace",
+  "subtitle": "Any region · bring your own data",
+  "description": "Drop GeoTIFFs (DEM, SAR, masks, imagery), GeoJSON, CSV or Excel files. TerraPulse inspects each file and proposes what it can do with it.",
+  "datasets": []
+}

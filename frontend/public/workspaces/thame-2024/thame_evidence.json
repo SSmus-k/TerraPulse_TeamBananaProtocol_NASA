@@ -1,0 +1,3303 @@
+{
+ "format": "terrapulse-table/v1",
+ "title": "Thame 2024 event evidence workbook",
+ "source_file": "Thame_Both_Hazards_Actual_Data.xlsx",
+ "provenance": "observed",
+ "citation": "Compiled by the team from the NHESS article (nhess-26-4131-2026), its supplement, UNOSAT LS20240818NPL and Sentinel Asia event page; see the Sources_and_Caveats sheet.",
+ "sheets": [
+  {
+   "name": "Read_Me",
+   "n_rows": 14,
+   "n_columns": 2,
+   "columns": [
+    {
+     "name": "Item",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 14,
+     "examples": [
+      "Purpose",
+      "What is populated",
+      "Critical limitation",
+      "GLOF target",
+      "Landslide target"
+     ]
+    },
+    {
+     "name": "Details",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 14,
+     "examples": [
+      "Two separate event-level datasets: one for GLOF occurrence and one for satellite-mapped landslide/mudslide impact.",
+      "Actual reported values from the uploaded Thame workbook and published Thame event sources are entered where available.",
+      "These are event-level records, NOT pixel-level training samples. One positive event does not provide enough independent samples to train or validate a machine-learning classifier.",
+      "glof_label = 1 for the documented 16-Aug-2024 Thame GLOF event. No verified non-GLOF/negative samples are present.",
+      "landslide_label = 1 for the UNOSAT satellite-mapped landslide/mudslide scar inventory (~140 ha). UNOSAT explicitly marks the assessment preliminary and not field-validated."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "Item",
+     "Details"
+    ],
+    "date_columns": [],
+    "feature_candidates": [],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Item": "Purpose",
+     "Details": "Two separate event-level datasets: one for GLOF occurrence and one for satellite-mapped landslide/mudslide impact."
+    },
+    {
+     "Item": "What is populated",
+     "Details": "Actual reported values from the uploaded Thame workbook and published Thame event sources are entered where available."
+    },
+    {
+     "Item": "Critical limitation",
+     "Details": "These are event-level records, NOT pixel-level training samples. One positive event does not provide enough independent samples to train or validate a machine-learning classifier."
+    },
+    {
+     "Item": "GLOF target",
+     "Details": "glof_label = 1 for the documented 16-Aug-2024 Thame GLOF event. No verified non-GLOF/negative samples are present."
+    },
+    {
+     "Item": "Landslide target",
+     "Details": "landslide_label = 1 for the UNOSAT satellite-mapped landslide/mudslide scar inventory (~140 ha). UNOSAT explicitly marks the assessment preliminary and not field-validated."
+    },
+    {
+     "Item": "No label conflation",
+     "Details": "GLOF flood extent and landslide/mudslide scars are kept as separate target types. A flooded pixel is not automatically labelled as a landslide."
+    },
+    {
+     "Item": "Satellite values",
+     "Details": "Scene dates, platforms, product descriptions and image resolutions are source-reported. Numeric VV/VH/HH/HV backscatter, coherence, incidence angle and LOS displacement are not published in the source material reviewed."
+    },
+    {
+     "Item": "Terrain values",
+     "Details": "Reported lake/village elevations, catchment areas, and a localized bedrock-step geometry are included. The source article says it used HMA DEM and a 1 m UAV DEM, but the raster cell values for slope/aspect/curvature/TWI are not in the supplied workbook."
+    },
+    {
+     "Item": "Missing values",
+     "Details": "Blank cells mean unavailable/not reported, not zero. Do not replace blanks with zero."
+    },
+    {
+     "Item": "Derived terrain value",
+     "Details": "The 39.8° angle in Terrain_Observations is calculated from the paper's reported 100 m vertical drop over 120 m horizontal distance. It is a local steep-section estimate, not a raster-derived slope layer."
+    },
+    {
+     "Item": "Use for ML",
+     "Details": "Use this workbook as a source-grounded event inventory and data-preparation starting point. Obtain/download the actual raster layers and vector inventories, align them spatially, then create many pixel/grid/slope-unit samples and verified negative samples."
+    },
+    {
+     "Item": "Source paper",
+     "Details": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "Item": "UNOSAT inventory map",
+     "Details": "https://unosat.org/static/unosat_filesystem/3919/UNOSAT_A3_Natural_Landscape_LS20240818NPL_Nepal_20Aug2024.pdf"
+    },
+    {
+     "Item": "Sentinel Asia event products",
+     "Details": "https://sentinel-asia.org/EO/2024/article20240816NP.html"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Event_Summary",
+   "n_rows": 14,
+   "n_columns": 4,
+   "columns": [
+    {
+     "name": "Field",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 14,
+     "examples": [
+      "Event_Name",
+      "Event_Date",
+      "Approx_Onset_Local",
+      "Approx_Village_Arrival_Local",
+      "Location"
+     ]
+    },
+    {
+     "name": "Value",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 14,
+     "examples": [
+      "Thame cascading GLOF 2024",
+      "2024-08-16",
+      "13:00",
+      "13:30",
+      "Thame Valley, Solukhumbu, Nepal"
+     ]
+    },
+    {
+     "name": "Notes",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 14,
+     "examples": [
+      "Upper Ngole outburst triggered lower Ngole lake failure",
+      "Date of event",
+      "Approximate onset inferred by authors",
+      "Local time reported by authorities/stakeholders",
+      "Everest/Khumbu region, Dudh Koshi basin"
+     ]
+    },
+    {
+     "name": "Source section",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "Abstract; Sections 1-2",
+      "Section 1",
+      "Section 4.2",
+      "Sections 1, 4.2",
+      "Section 2"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "Field",
+     "Value",
+     "Notes"
+    ],
+    "date_columns": [],
+    "feature_candidates": [
+     "Source section"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Field": "Event_Name",
+     "Value": "Thame cascading GLOF 2024",
+     "Notes": "Upper Ngole outburst triggered lower Ngole lake failure",
+     "Source section": "Abstract; Sections 1-2"
+    },
+    {
+     "Field": "Event_Date",
+     "Value": "2024-08-16",
+     "Notes": "Date of event",
+     "Source section": "Section 1"
+    },
+    {
+     "Field": "Approx_Onset_Local",
+     "Value": "13:00",
+     "Notes": "Approximate onset inferred by authors",
+     "Source section": "Section 4.2"
+    },
+    {
+     "Field": "Approx_Village_Arrival_Local",
+     "Value": "13:30",
+     "Notes": "Local time reported by authorities/stakeholders",
+     "Source section": "Sections 1, 4.2"
+    },
+    {
+     "Field": "Location",
+     "Value": "Thame Valley, Solukhumbu, Nepal",
+     "Notes": "Everest/Khumbu region, Dudh Koshi basin",
+     "Source section": "Section 2"
+    },
+    {
+     "Field": "Village_Elevation_m",
+     "Value": 3800,
+     "Notes": "Approximate elevation above sea level",
+     "Source section": "Section 2"
+    },
+    {
+     "Field": "Upper_Lake_Elevation_m",
+     "Value": 4890,
+     "Notes": "Upper Ngole lake",
+     "Source section": "Section 2"
+    },
+    {
+     "Field": "Lower_Lake_Elevation_m",
+     "Value": 4718,
+     "Notes": "Lower Ngole / Ngole Pokhari",
+     "Source section": "Section 2"
+    },
+    {
+     "Field": "Total_Drained_Volume_m3",
+     "Value": 770000,
+     "Notes": "Approximate combined drone-DEM estimate",
+     "Source section": "Abstract; Section 4.2"
+    },
+    {
+     "Field": "Initial_Peak_Discharge_m3_s",
+     "Value": ">800",
+     "Notes": "Abstract estimate; scenario outputs vary by location/scenario",
+     "Source section": "Abstract"
+    },
+    {
+     "Field": "People_Displaced",
+     "Value": 135,
+     "Notes": "Reported displaced people",
+     "Source section": "Section 4.5"
+    },
+    {
+     "Field": "Fatalities",
+     "Value": 0,
+     "Notes": "Paper states no casualties",
+     "Source section": "Section 4.5"
+    },
+    {
+     "Field": "People_Injured",
+     "Value": 1,
+     "Notes": "As listed in Table 6",
+     "Source section": "Table 6"
+    },
+    {
+     "Field": "Estimated_Loss_USD",
+     "Value": 6184544,
+     "Notes": "Total reported for Khumbu Pasang Lhamu Rural Municipality",
+     "Source section": "Table 6"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Lake_Measurements",
+   "n_rows": 6,
+   "n_columns": 10,
+   "columns": [
+    {
+     "name": "Lake",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "Upper Ngole",
+      "Lower Ngole / Ngole Pokhari"
+     ]
+    },
+    {
+     "name": "Date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "2024-08-15",
+      "2024-08-18",
+      "2024-08-16"
+     ],
+     "min": "2024-08-15T00:00:00",
+     "max": "2024-08-18T00:00:00"
+    },
+    {
+     "name": "Phase",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "Pre-event",
+      "Post-event",
+      "Drained volume"
+     ]
+    },
+    {
+     "name": "Area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.5,
+     "n_unique": 3,
+     "examples": [
+      0.11,
+      0.048,
+      0.015
+     ],
+     "min": 0.015,
+     "max": 0.11,
+     "mean": 0.057666666666666665
+    },
+    {
+     "name": "Area_Uncertainty_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.6666666666666666,
+     "n_unique": 2,
+     "examples": [
+      0.004,
+      0.01
+     ],
+     "min": 0.004,
+     "max": 0.01,
+     "mean": 0.007
+    },
+    {
+     "name": "Area_Change_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.6666666666666666,
+     "n_unique": 2,
+     "examples": [
+      -0.013,
+      -0.033
+     ],
+     "min": -0.033,
+     "max": -0.013,
+     "mean": -0.023
+    },
+    {
+     "name": "Elevation_m_asl",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      4890,
+      4718
+     ],
+     "min": 4718,
+     "max": 4890,
+     "mean": 4804.0
+    },
+    {
+     "name": "Catchment_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      5,
+      9
+     ],
+     "min": 5,
+     "max": 9,
+     "mean": 7.0
+    },
+    {
+     "name": "Dam_Type",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "Bedrock overlain by moraine",
+      "Moraine"
+     ]
+    },
+    {
+     "name": "Notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 6,
+     "examples": [
+      "Pre-event lake area",
+      "Area reported to have reduced by 0.013 km²; exact post-event area not stated in text",
+      "Pre-event area",
+      "Post-event area",
+      "~410,000 m³ drained; lake level lowered ~4.6 m; dam breached ~21 m"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [
+     "Catchment_km2"
+    ],
+    "identifier_columns": [],
+    "date_columns": [
+     "Date"
+    ],
+    "feature_candidates": [
+     "Lake",
+     "Phase",
+     "Area_km2",
+     "Area_Uncertainty_km2",
+     "Area_Change_km2",
+     "Elevation_m_asl",
+     "Catchment_km2",
+     "Dam_Type",
+     "Notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Lake": "Upper Ngole",
+     "Date": "2024-08-15",
+     "Phase": "Pre-event",
+     "Area_km2": 0.11,
+     "Area_Uncertainty_km2": 0.004,
+     "Area_Change_km2": null,
+     "Elevation_m_asl": 4890,
+     "Catchment_km2": 5,
+     "Dam_Type": "Bedrock overlain by moraine",
+     "Notes": "Pre-event lake area"
+    },
+    {
+     "Lake": "Upper Ngole",
+     "Date": "2024-08-18",
+     "Phase": "Post-event",
+     "Area_km2": null,
+     "Area_Uncertainty_km2": null,
+     "Area_Change_km2": -0.013,
+     "Elevation_m_asl": 4890,
+     "Catchment_km2": 5,
+     "Dam_Type": "Bedrock overlain by moraine",
+     "Notes": "Area reported to have reduced by 0.013 km²; exact post-event area not stated in text"
+    },
+    {
+     "Lake": "Lower Ngole / Ngole Pokhari",
+     "Date": "2024-08-15",
+     "Phase": "Pre-event",
+     "Area_km2": 0.048,
+     "Area_Uncertainty_km2": 0.01,
+     "Area_Change_km2": null,
+     "Elevation_m_asl": 4718,
+     "Catchment_km2": 9,
+     "Dam_Type": "Moraine",
+     "Notes": "Pre-event area"
+    },
+    {
+     "Lake": "Lower Ngole / Ngole Pokhari",
+     "Date": "2024-08-18",
+     "Phase": "Post-event",
+     "Area_km2": 0.015,
+     "Area_Uncertainty_km2": null,
+     "Area_Change_km2": -0.033,
+     "Elevation_m_asl": 4718,
+     "Catchment_km2": 9,
+     "Dam_Type": "Moraine",
+     "Notes": "Post-event area"
+    },
+    {
+     "Lake": "Upper Ngole",
+     "Date": "2024-08-16",
+     "Phase": "Drained volume",
+     "Area_km2": null,
+     "Area_Uncertainty_km2": null,
+     "Area_Change_km2": null,
+     "Elevation_m_asl": 4890,
+     "Catchment_km2": 5,
+     "Dam_Type": "Bedrock overlain by moraine",
+     "Notes": "~410,000 m³ drained; lake level lowered ~4.6 m; dam breached ~21 m"
+    },
+    {
+     "Lake": "Lower Ngole / Ngole Pokhari",
+     "Date": "2024-08-16",
+     "Phase": "Drained volume",
+     "Area_km2": null,
+     "Area_Uncertainty_km2": null,
+     "Area_Change_km2": null,
+     "Elevation_m_asl": 4718,
+     "Catchment_km2": 9,
+     "Dam_Type": "Moraine",
+     "Notes": "~360,000 m³ drained; lake level lowered ~12 m; dam incised ~30 m"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Climate_Reported",
+   "n_rows": 8,
+   "n_columns": 6,
+   "columns": [
+    {
+     "name": "Variable",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      "ERA5-Land minimum temperature",
+      "ERA5-Land maximum temperature",
+      "Phortse station minimum temperature",
+      "Phortse station maximum temperature",
+      "Phortse cumulative precipitation"
+     ]
+    },
+    {
+     "name": "Value",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 7,
+     "examples": [
+      3.7,
+      9.7,
+      7.45,
+      14.13,
+      124
+     ]
+    },
+    {
+     "name": "Unit",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "°C",
+      "mm",
+      "category"
+     ]
+    },
+    {
+     "name": "Period_or_Date",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 6,
+     "examples": [
+      "2024-08-15",
+      "Pre-event period",
+      "14-day wet period before event",
+      "2024-08-12 to 2024-08-15",
+      "2024-08-14 to 2024-08-15"
+     ]
+    },
+    {
+     "name": "Dataset_or_Station",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "ERA5-Land",
+      "Phortse AWS"
+     ]
+    },
+    {
+     "name": "Notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 5,
+     "examples": [
+      "Day before event",
+      "Station 11 km east of Thame, elevation 3850 m",
+      "Cumulative, not daily rainfall",
+      "Reported exceedance",
+      "Compared with same 30-day period in 1990-2024"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Variable",
+     "Value",
+     "Unit",
+     "Period_or_Date",
+     "Dataset_or_Station",
+     "Notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Variable": "ERA5-Land minimum temperature",
+     "Value": 3.7,
+     "Unit": "°C",
+     "Period_or_Date": "2024-08-15",
+     "Dataset_or_Station": "ERA5-Land",
+     "Notes": "Day before event"
+    },
+    {
+     "Variable": "ERA5-Land maximum temperature",
+     "Value": 9.7,
+     "Unit": "°C",
+     "Period_or_Date": "2024-08-15",
+     "Dataset_or_Station": "ERA5-Land",
+     "Notes": "Day before event"
+    },
+    {
+     "Variable": "Phortse station minimum temperature",
+     "Value": 7.45,
+     "Unit": "°C",
+     "Period_or_Date": "Pre-event period",
+     "Dataset_or_Station": "Phortse AWS",
+     "Notes": "Station 11 km east of Thame, elevation 3850 m"
+    },
+    {
+     "Variable": "Phortse station maximum temperature",
+     "Value": 14.13,
+     "Unit": "°C",
+     "Period_or_Date": "Pre-event period",
+     "Dataset_or_Station": "Phortse AWS",
+     "Notes": "Station 11 km east of Thame, elevation 3850 m"
+    },
+    {
+     "Variable": "Phortse cumulative precipitation",
+     "Value": 124,
+     "Unit": "mm",
+     "Period_or_Date": "14-day wet period before event",
+     "Dataset_or_Station": "Phortse AWS",
+     "Notes": "Cumulative, not daily rainfall"
+    },
+    {
+     "Variable": "Temperature anomaly",
+     "Value": "Above 90th and 95th percentiles",
+     "Unit": "category",
+     "Period_or_Date": "2024-08-12 to 2024-08-15",
+     "Dataset_or_Station": "ERA5-Land",
+     "Notes": "Reported exceedance"
+    },
+    {
+     "Variable": "Precipitation anomaly",
+     "Value": "Above 90th and 95th percentiles",
+     "Unit": "category",
+     "Period_or_Date": "2024-08-14 to 2024-08-15",
+     "Dataset_or_Station": "ERA5-Land",
+     "Notes": "Reported exceedance"
+    },
+    {
+     "Variable": "30-day temperature context",
+     "Value": "Warmest on record, 1990-2024",
+     "Unit": "category",
+     "Period_or_Date": "2024-07-17 to 2024-08-15",
+     "Dataset_or_Station": "ERA5-Land",
+     "Notes": "Compared with same 30-day period in 1990-2024"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Flow_Scenarios",
+   "n_rows": 4,
+   "n_columns": 8,
+   "columns": [
+    {
+     "name": "Scenario",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "A",
+      "B"
+     ]
+    },
+    {
+     "name": "Location",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "Thame Village (O2)",
+      "Immediate outlet (O1)"
+     ]
+    },
+    {
+     "name": "Arrival_Time_s",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 4,
+     "examples": [
+      1300,
+      800,
+      880,
+      240
+     ],
+     "min": 240,
+     "max": 1300,
+     "mean": 805.0
+    },
+    {
+     "name": "Arrival_Time_min",
+     "kind": "numeric",
+     "missing_fraction": 0.5,
+     "n_unique": 2,
+     "examples": [
+      22.0,
+      15.0
+     ],
+     "min": 15.0,
+     "max": 22.0,
+     "mean": 18.5
+    },
+    {
+     "name": "Peak_Discharge_m3_s",
+     "kind": "numeric",
+     "missing_fraction": 0.25,
+     "n_unique": 3,
+     "examples": [
+      574.0,
+      912.0,
+      1240.0
+     ],
+     "min": 574.0,
+     "max": 1240.0,
+     "mean": 908.6666666666666
+    },
+    {
+     "name": "Max_Flow_Height_m",
+     "kind": "numeric",
+     "missing_fraction": 0.5,
+     "n_unique": 1,
+     "examples": [
+      4.0
+     ],
+     "min": 4.0,
+     "max": 4.0,
+     "mean": 4.0
+    },
+    {
+     "name": "Velocity_m_s",
+     "kind": "numeric",
+     "missing_fraction": 0.75,
+     "n_unique": 1,
+     "examples": [
+      10.0
+     ],
+     "min": 10.0,
+     "max": 10.0,
+     "mean": 10.0
+    },
+    {
+     "name": "Notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "Authors consider A more plausible based on observed channel scour/depth",
+      "Liquid-phase discharge peak at outlet",
+      "Gradual filling/overtopping scenario"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Scenario",
+     "Location",
+     "Arrival_Time_s",
+     "Arrival_Time_min",
+     "Peak_Discharge_m3_s",
+     "Max_Flow_Height_m",
+     "Velocity_m_s",
+     "Notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Scenario": "A",
+     "Location": "Thame Village (O2)",
+     "Arrival_Time_s": 1300,
+     "Arrival_Time_min": 22.0,
+     "Peak_Discharge_m3_s": 574.0,
+     "Max_Flow_Height_m": 4.0,
+     "Velocity_m_s": 10.0,
+     "Notes": "Authors consider A more plausible based on observed channel scour/depth"
+    },
+    {
+     "Scenario": "A",
+     "Location": "Immediate outlet (O1)",
+     "Arrival_Time_s": 800,
+     "Arrival_Time_min": null,
+     "Peak_Discharge_m3_s": 912.0,
+     "Max_Flow_Height_m": null,
+     "Velocity_m_s": null,
+     "Notes": "Liquid-phase discharge peak at outlet"
+    },
+    {
+     "Scenario": "B",
+     "Location": "Thame Village (O2)",
+     "Arrival_Time_s": 880,
+     "Arrival_Time_min": 15.0,
+     "Peak_Discharge_m3_s": null,
+     "Max_Flow_Height_m": 4.0,
+     "Velocity_m_s": null,
+     "Notes": "Gradual filling/overtopping scenario"
+    },
+    {
+     "Scenario": "B",
+     "Location": "Immediate outlet (O1)",
+     "Arrival_Time_s": 240,
+     "Arrival_Time_min": null,
+     "Peak_Discharge_m3_s": 1240.0,
+     "Max_Flow_Height_m": null,
+     "Velocity_m_s": null,
+     "Notes": "Liquid-phase discharge peak at outlet"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Impacts",
+   "n_rows": 9,
+   "n_columns": 4,
+   "columns": [
+    {
+     "name": "Impact",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "People displaced",
+      "People injured",
+      "Private houses and lodges",
+      "Primary school",
+      "Trekking trails damaged"
+     ]
+    },
+    {
+     "name": "Reported_Value",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 7,
+     "examples": [
+      135,
+      1,
+      "45 owners",
+      1.2,
+      98920
+     ]
+    },
+    {
+     "name": "Unit",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "people",
+      "person",
+      "owners",
+      "school",
+      "km"
+     ]
+    },
+    {
+     "name": "Notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "No fatalities reported",
+      "Table 6",
+      "Buildings, furniture and property inside",
+      "School and school property",
+      "Table 6 says 1.2 km in different places; text separately reports ~500 m in Thame Village"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Impact",
+     "Reported_Value",
+     "Unit",
+     "Notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Impact": "People displaced",
+     "Reported_Value": 135,
+     "Unit": "people",
+     "Notes": "No fatalities reported"
+    },
+    {
+     "Impact": "People injured",
+     "Reported_Value": 1,
+     "Unit": "person",
+     "Notes": "Table 6"
+    },
+    {
+     "Impact": "Private houses and lodges",
+     "Reported_Value": "45 owners",
+     "Unit": "owners",
+     "Notes": "Buildings, furniture and property inside"
+    },
+    {
+     "Impact": "Primary school",
+     "Reported_Value": 1,
+     "Unit": "school",
+     "Notes": "School and school property"
+    },
+    {
+     "Impact": "Trekking trails damaged",
+     "Reported_Value": 1.2,
+     "Unit": "km",
+     "Notes": "Table 6 says 1.2 km in different places; text separately reports ~500 m in Thame Village"
+    },
+    {
+     "Impact": "Private land affected",
+     "Reported_Value": 98920,
+     "Unit": "m²",
+     "Notes": "Agricultural and land property"
+    },
+    {
+     "Impact": "Micro-hydropower",
+     "Reported_Value": "Partial damage",
+     "Unit": "category",
+     "Notes": "Intake/desander and connecting pipes damaged; later reconstructed"
+    },
+    {
+     "Impact": "Motorable bridge",
+     "Reported_Value": 1,
+     "Unit": "bridge",
+     "Notes": "Damaged 47 km downstream"
+    },
+    {
+     "Impact": "Total estimated loss",
+     "Reported_Value": 6184544,
+     "Unit": "USD",
+     "Notes": "Paper also reports NPR 82,879,780"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Lake3_4_5_TimeSeries",
+   "n_rows": 23,
+   "n_columns": 5,
+   "columns": [
+    {
+     "name": "Date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      "1976-11-13",
+      "1989-11-09",
+      "1995-10-09",
+      "2000-11-23",
+      "2005-11-10"
+     ],
+     "min": "1976-11-13T00:00:00",
+     "max": "2025-09-03T00:00:00"
+    },
+    {
+     "name": "Lake_Number",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      3,
+      4,
+      5
+     ],
+     "min": 3,
+     "max": 5,
+     "mean": 3.8260869565217392
+    },
+    {
+     "name": "Area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 16,
+     "examples": [
+      0.052,
+      0.055,
+      0.057,
+      0.056,
+      0.053
+     ],
+     "min": 0.006,
+     "max": 0.073,
+     "mean": 0.05069565217391303
+    },
+    {
+     "name": "Area_Error_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      0.026,
+      0.014,
+      0.004,
+      0.001,
+      0.03
+     ],
+     "min": 0.001,
+     "max": 0.03,
+     "mean": 0.011521739130434782
+    },
+    {
+     "name": "Perimeter_km",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 16,
+     "examples": [
+      0.88,
+      0.96,
+      0.91,
+      0.93,
+      0.9
+     ],
+     "min": 0.4,
+     "max": 1.12,
+     "mean": 0.9386956521739127
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [
+     "Lake_Number"
+    ],
+    "identifier_columns": [],
+    "date_columns": [
+     "Date"
+    ],
+    "feature_candidates": [
+     "Lake_Number",
+     "Area_km2",
+     "Area_Error_km2",
+     "Perimeter_km"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Date": "1976-11-13",
+     "Lake_Number": 3,
+     "Area_km2": 0.052,
+     "Area_Error_km2": 0.026,
+     "Perimeter_km": 0.88
+    },
+    {
+     "Date": "1989-11-09",
+     "Lake_Number": 3,
+     "Area_km2": 0.055,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.96
+    },
+    {
+     "Date": "1995-10-09",
+     "Lake_Number": 3,
+     "Area_km2": 0.055,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.91
+    },
+    {
+     "Date": "2000-11-23",
+     "Lake_Number": 3,
+     "Area_km2": 0.057,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2005-11-10",
+     "Lake_Number": 3,
+     "Area_km2": 0.056,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2009-10-05",
+     "Lake_Number": 3,
+     "Area_km2": 0.057,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2015-11-17",
+     "Lake_Number": 3,
+     "Area_km2": 0.057,
+     "Area_Error_km2": 0.014,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2020-10-09",
+     "Lake_Number": 3,
+     "Area_km2": 0.053,
+     "Area_Error_km2": 0.004,
+     "Perimeter_km": 0.9
+    },
+    {
+     "Date": "2024-05-30",
+     "Lake_Number": 3,
+     "Area_km2": 0.042,
+     "Area_Error_km2": 0.001,
+     "Perimeter_km": 0.81
+    },
+    {
+     "Date": "1976-11-13",
+     "Lake_Number": 4,
+     "Area_km2": 0.063,
+     "Area_Error_km2": 0.03,
+     "Perimeter_km": 0.98
+    },
+    {
+     "Date": "1989-11-09",
+     "Lake_Number": 4,
+     "Area_km2": 0.067,
+     "Area_Error_km2": 0.016,
+     "Perimeter_km": 1.08
+    },
+    {
+     "Date": "1995-10-09",
+     "Lake_Number": 4,
+     "Area_km2": 0.073,
+     "Area_Error_km2": 0.017,
+     "Perimeter_km": 1.12
+    },
+    {
+     "Date": "2000-11-23",
+     "Lake_Number": 4,
+     "Area_km2": 0.068,
+     "Area_Error_km2": 0.016,
+     "Perimeter_km": 1.1
+    },
+    {
+     "Date": "2005-11-10",
+     "Lake_Number": 4,
+     "Area_km2": 0.068,
+     "Area_Error_km2": 0.017,
+     "Perimeter_km": 1.11
+    },
+    {
+     "Date": "2009-10-05",
+     "Lake_Number": 4,
+     "Area_km2": 0.066,
+     "Area_Error_km2": 0.016,
+     "Perimeter_km": 1.1
+    },
+    {
+     "Date": "2015-11-17",
+     "Lake_Number": 4,
+     "Area_km2": 0.067,
+     "Area_Error_km2": 0.016,
+     "Perimeter_km": 1.08
+    },
+    {
+     "Date": "2020-10-09",
+     "Lake_Number": 4,
+     "Area_km2": 0.055,
+     "Area_Error_km2": 0.005,
+     "Perimeter_km": 1.06
+    },
+    {
+     "Date": "2024-05-30",
+     "Lake_Number": 4,
+     "Area_km2": 0.042,
+     "Area_Error_km2": 0.001,
+     "Perimeter_km": 0.99
+    },
+    {
+     "Date": "2020-10-09",
+     "Lake_Number": 5,
+     "Area_km2": 0.048,
+     "Area_Error_km2": 0.005,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2024-05-17",
+     "Lake_Number": 5,
+     "Area_km2": 0.021,
+     "Area_Error_km2": 0.005,
+     "Perimeter_km": 0.93
+    },
+    {
+     "Date": "2024-05-30",
+     "Lake_Number": 5,
+     "Area_km2": 0.011,
+     "Area_Error_km2": 0.001,
+     "Perimeter_km": 0.7
+    },
+    {
+     "Date": "2024-11-27",
+     "Lake_Number": 5,
+     "Area_km2": 0.027,
+     "Area_Error_km2": 0.004,
+     "Perimeter_km": 0.83
+    },
+    {
+     "Date": "2025-09-03",
+     "Lake_Number": 5,
+     "Area_km2": 0.006,
+     "Area_Error_km2": 0.001,
+     "Perimeter_km": 0.4
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Model_Performance",
+   "n_rows": 2,
+   "n_columns": 5,
+   "columns": [
+    {
+     "name": "Scenario",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      "A",
+      "B"
+     ]
+    },
+    {
+     "name": "Precision",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      0.73,
+      0.71
+     ],
+     "min": 0.71,
+     "max": 0.73,
+     "mean": 0.72
+    },
+    {
+     "name": "Recall",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      0.85,
+      0.83
+     ],
+     "min": 0.83,
+     "max": 0.85,
+     "mean": 0.84
+    },
+    {
+     "name": "F1_Score",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 2,
+     "examples": [
+      0.78,
+      0.77
+     ],
+     "min": 0.77,
+     "max": 0.78,
+     "mean": 0.775
+    },
+    {
+     "name": "Meaning",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "r.avaflow reconstruction vs satellite-derived inundation; not ML classifier scores"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Scenario",
+     "Precision",
+     "Recall",
+     "F1_Score",
+     "Meaning"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Scenario": "A",
+     "Precision": 0.73,
+     "Recall": 0.85,
+     "F1_Score": 0.78,
+     "Meaning": "r.avaflow reconstruction vs satellite-derived inundation; not ML classifier scores"
+    },
+    {
+     "Scenario": "B",
+     "Precision": 0.71,
+     "Recall": 0.83,
+     "F1_Score": 0.77,
+     "Meaning": "r.avaflow reconstruction vs satellite-derived inundation; not ML classifier scores"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "ML_Feature_Template",
+   "n_rows": 0,
+   "n_columns": 32,
+   "columns": [
+    {
+     "name": "sample_id",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "date",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "site_or_lake",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "latitude",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "longitude",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "elevation_m",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "slope_deg",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "aspect_deg",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "curvature",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "rainfall_1d_mm",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "rainfall_3d_mm",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "rainfall_7d_mm",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "rainfall_14d_mm",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "temperature_mean_c",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "temperature_max_c",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "temperature_min_c",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "lake_area_km2",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "lake_area_change_km2",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "water_level_change_m",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "DEM_change_m",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "NDVI",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "water_index",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "SAR_VV_dB",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "SAR_VH_dB",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "SAR_coherence",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "land_cover",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "geology",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "distance_to_channel_m",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "flood_or_change_label",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "label_source",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "image_date",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    },
+    {
+     "name": "notes",
+     "kind": "empty",
+     "missing_fraction": 0.0,
+     "n_unique": 0,
+     "examples": []
+    }
+   ],
+   "coordinates": {
+    "lat": "latitude",
+    "lon": "longitude",
+    "valid_rows": 0,
+    "note": "coordinate columns found but contain no valid values"
+   },
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "sample_id"
+    ],
+    "date_columns": [],
+    "feature_candidates": [],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Data_Dictionary",
+   "n_rows": 10,
+   "n_columns": 5,
+   "columns": [
+    {
+     "name": "Field",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 10,
+     "examples": [
+      "Lake area",
+      "Lake area uncertainty",
+      "Drained volume",
+      "Temperature",
+      "Precipitation"
+     ]
+    },
+    {
+     "name": "Meaning",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 10,
+     "examples": [
+      "Delineated lake surface area",
+      "Boundary delineation uncertainty",
+      "Water volume released",
+      "Daily 2 m air temperature",
+      "Daily or accumulated precipitation"
+     ]
+    },
+    {
+     "name": "Unit_or_Format",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      "km²",
+      "m³",
+      "°C",
+      "mm",
+      "dB"
+     ]
+    },
+    {
+     "name": "ML_Use",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "Temporal predictor",
+      "Quality feature",
+      "Event descriptor/possible regression target",
+      "Environmental predictor",
+      "Potential remote-sensing predictors"
+     ]
+    },
+    {
+     "name": "Availability",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "Partially reported; not pixel-level",
+      "Some observations reported",
+      "Estimated in paper",
+      "Full ERA5-Land series described, selected values summarized",
+      "Selected summaries only"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Field",
+     "Meaning",
+     "Unit_or_Format",
+     "ML_Use",
+     "Availability"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Field": "Lake area",
+     "Meaning": "Delineated lake surface area",
+     "Unit_or_Format": "km²",
+     "ML_Use": "Temporal predictor",
+     "Availability": "Partially reported; not pixel-level"
+    },
+    {
+     "Field": "Lake area uncertainty",
+     "Meaning": "Boundary delineation uncertainty",
+     "Unit_or_Format": "km²",
+     "ML_Use": "Quality feature",
+     "Availability": "Some observations reported"
+    },
+    {
+     "Field": "Drained volume",
+     "Meaning": "Water volume released",
+     "Unit_or_Format": "m³",
+     "ML_Use": "Event descriptor/possible regression target",
+     "Availability": "Estimated in paper"
+    },
+    {
+     "Field": "Temperature",
+     "Meaning": "Daily 2 m air temperature",
+     "Unit_or_Format": "°C",
+     "ML_Use": "Environmental predictor",
+     "Availability": "Full ERA5-Land series described, selected values summarized"
+    },
+    {
+     "Field": "Precipitation",
+     "Meaning": "Daily or accumulated precipitation",
+     "Unit_or_Format": "mm",
+     "ML_Use": "Environmental predictor",
+     "Availability": "Selected summaries only"
+    },
+    {
+     "Field": "SAR_VV_dB / SAR_VH_dB",
+     "Meaning": "Radar backscatter",
+     "Unit_or_Format": "dB",
+     "ML_Use": "Potential remote-sensing predictors",
+     "Availability": "Not provided as numeric data in this paper"
+    },
+    {
+     "Field": "SAR_coherence",
+     "Meaning": "Interferometric coherence",
+     "Unit_or_Format": "0-1",
+     "ML_Use": "Potential predictor",
+     "Availability": "Not provided as numeric data in this paper"
+    },
+    {
+     "Field": "DEM_change_m",
+     "Meaning": "Pre/post elevation difference",
+     "Unit_or_Format": "m",
+     "ML_Use": "Change feature",
+     "Availability": "Need to derive from DEM rasters"
+    },
+    {
+     "Field": "flood_or_change_label",
+     "Meaning": "Spatial flood/change class",
+     "Unit_or_Format": "0/1 or classes",
+     "ML_Use": "Potential ML target",
+     "Availability": "Must be mapped/labelled; not supplied as sample rows"
+    },
+    {
+     "Field": "Model performance",
+     "Meaning": "Precision, recall, F1 for r.avaflow scenarios",
+     "Unit_or_Format": "0-1",
+     "ML_Use": "Reference benchmark only",
+     "Availability": "Reported; not ML classifier performance"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Sources_and_Caveats",
+   "n_rows": 4,
+   "n_columns": 4,
+   "columns": [
+    {
+     "name": "Source",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 4,
+     "examples": [
+      "Main NHESS article",
+      "NHESS supplement",
+      "Dataset limitation",
+      "NISAR timing note"
+     ]
+    },
+    {
+     "name": "URL",
+     "kind": "categorical",
+     "missing_fraction": 0.25,
+     "n_unique": 3,
+     "examples": [
+      "https://nhess.copernicus.org/articles/26/4131/2026/",
+      "https://nhess.copernicus.org/articles/26/4131/2026/nhess-26-4131-2026-supplement.pdf",
+      "https://science.nasa.gov/mission/nisar/"
+     ]
+    },
+    {
+     "name": "Use",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 4,
+     "examples": [
+      "Event, lake metrics, climate summaries, scenario outputs, impacts",
+      "Supplement Tables S1-S4; lake 3/4/5 time series and estimates",
+      "This is a source-derived event dataset plus a blank feature template, not a pixel-level ML training dataset.",
+      "Mission timing context"
+     ]
+    },
+    {
+     "name": "Caveat",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 4,
+     "examples": [
+      "Values transcribed from article text and Table 6",
+      "Table S3 dates normalized to YYYY-MM-DD",
+      "Do not train a pixel classifier directly on event-summary rows; obtain satellite/DEM/climate rasters and create spatial samples with validated labels.",
+      "NISAR launched in 2025; cannot provide pre-event or immediate August 2024 imagery."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [],
+    "date_columns": [],
+    "feature_candidates": [
+     "Source",
+     "URL",
+     "Use",
+     "Caveat"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Source": "Main NHESS article",
+     "URL": "https://nhess.copernicus.org/articles/26/4131/2026/",
+     "Use": "Event, lake metrics, climate summaries, scenario outputs, impacts",
+     "Caveat": "Values transcribed from article text and Table 6"
+    },
+    {
+     "Source": "NHESS supplement",
+     "URL": "https://nhess.copernicus.org/articles/26/4131/2026/nhess-26-4131-2026-supplement.pdf",
+     "Use": "Supplement Tables S1-S4; lake 3/4/5 time series and estimates",
+     "Caveat": "Table S3 dates normalized to YYYY-MM-DD"
+    },
+    {
+     "Source": "Dataset limitation",
+     "URL": null,
+     "Use": "This is a source-derived event dataset plus a blank feature template, not a pixel-level ML training dataset.",
+     "Caveat": "Do not train a pixel classifier directly on event-summary rows; obtain satellite/DEM/climate rasters and create spatial samples with validated labels."
+    },
+    {
+     "Source": "NISAR timing note",
+     "URL": "https://science.nasa.gov/mission/nisar/",
+     "Use": "Mission timing context",
+     "Caveat": "NISAR launched in 2025; cannot provide pre-event or immediate August 2024 imagery."
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "GLOF_Event_Data",
+   "n_rows": 1,
+   "n_columns": 28,
+   "columns": [
+    {
+     "name": "sample_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_GLOF_20240816_001"
+     ]
+    },
+    {
+     "name": "event_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_GLOF_2024"
+     ]
+    },
+    {
+     "name": "event_date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "2024-08-16"
+     ],
+     "min": "2024-08-16T00:00:00",
+     "max": "2024-08-16T00:00:00"
+    },
+    {
+     "name": "location",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "Thame Valley, Solukhumbu, Nepal"
+     ]
+    },
+    {
+     "name": "village_elevation_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      3800
+     ],
+     "min": 3800,
+     "max": 3800,
+     "mean": 3800.0
+    },
+    {
+     "name": "upper_lake_elevation_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      4890
+     ],
+     "min": 4890,
+     "max": 4890,
+     "mean": 4890.0
+    },
+    {
+     "name": "lower_lake_elevation_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      4718
+     ],
+     "min": 4718,
+     "max": 4718,
+     "mean": 4718.0
+    },
+    {
+     "name": "upper_lake_pre_area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      0.11
+     ],
+     "min": 0.11,
+     "max": 0.11,
+     "mean": 0.11
+    },
+    {
+     "name": "upper_lake_area_uncertainty_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      0.004
+     ],
+     "min": 0.004,
+     "max": 0.004,
+     "mean": 0.004
+    },
+    {
+     "name": "upper_lake_area_change_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      -0.013
+     ],
+     "min": -0.013,
+     "max": -0.013,
+     "mean": -0.013
+    },
+    {
+     "name": "lower_lake_pre_area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      0.048
+     ],
+     "min": 0.048,
+     "max": 0.048,
+     "mean": 0.048
+    },
+    {
+     "name": "lower_lake_post_area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      0.015
+     ],
+     "min": 0.015,
+     "max": 0.015,
+     "mean": 0.015
+    },
+    {
+     "name": "lower_lake_area_change_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      -0.033
+     ],
+     "min": -0.033,
+     "max": -0.033,
+     "mean": -0.033
+    },
+    {
+     "name": "upper_lake_catchment_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      5
+     ],
+     "min": 5,
+     "max": 5,
+     "mean": 5.0
+    },
+    {
+     "name": "lower_lake_catchment_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      9
+     ],
+     "min": 9,
+     "max": 9,
+     "mean": 9.0
+    },
+    {
+     "name": "upper_lake_drained_volume_m3",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      410000
+     ],
+     "min": 410000,
+     "max": 410000,
+     "mean": 410000.0
+    },
+    {
+     "name": "lower_lake_drained_volume_m3",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      360000
+     ],
+     "min": 360000,
+     "max": 360000,
+     "mean": 360000.0
+    },
+    {
+     "name": "total_drained_volume_m3",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      770000
+     ],
+     "min": 770000,
+     "max": 770000,
+     "mean": 770000.0
+    },
+    {
+     "name": "lower_lake_level_drop_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      12
+     ],
+     "min": 12,
+     "max": 12,
+     "mean": 12.0
+    },
+    {
+     "name": "lower_dam_incision_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      30
+     ],
+     "min": 30,
+     "max": 30,
+     "mean": 30.0
+    },
+    {
+     "name": "rainfall_14d_mm_phortse",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      124
+     ],
+     "min": 124,
+     "max": 124,
+     "mean": 124.0
+    },
+    {
+     "name": "era5_min_temp_c_2024_08_15",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      3.7
+     ],
+     "min": 3.7,
+     "max": 3.7,
+     "mean": 3.7
+    },
+    {
+     "name": "era5_max_temp_c_2024_08_15",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      9.7
+     ],
+     "min": 9.7,
+     "max": 9.7,
+     "mean": 9.7
+    },
+    {
+     "name": "satellite_evidence",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "Sentinel-1 damage proxy (19-Aug-2024); ALOS-2 flood proxy (24-Aug-2024); article multi-source imagery"
+     ]
+    },
+    {
+     "name": "glof_label",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      1
+     ],
+     "min": 1,
+     "max": 1,
+     "mean": 1.0
+    },
+    {
+     "name": "label_status",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "Documented event; event-level label, not pixel label"
+     ]
+    },
+    {
+     "name": "train_test_group",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_EVENT_ONLY"
+     ]
+    },
+    {
+     "name": "notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "One documented positive event. Negative/background GLOF samples and pixel-level predictor values are unavailable. 14-day precipitation is cumulative Phortse AWS, not daily rainfall."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "sample_id",
+     "event_id"
+    ],
+    "date_columns": [
+     "event_date"
+    ],
+    "feature_candidates": [
+     "location",
+     "village_elevation_m",
+     "upper_lake_elevation_m",
+     "lower_lake_elevation_m",
+     "upper_lake_pre_area_km2",
+     "upper_lake_area_uncertainty_km2",
+     "upper_lake_area_change_km2",
+     "lower_lake_pre_area_km2",
+     "lower_lake_post_area_km2",
+     "lower_lake_area_change_km2",
+     "upper_lake_catchment_km2",
+     "lower_lake_catchment_km2",
+     "upper_lake_drained_volume_m3",
+     "lower_lake_drained_volume_m3",
+     "total_drained_volume_m3",
+     "lower_lake_level_drop_m",
+     "lower_dam_incision_m",
+     "rainfall_14d_mm_phortse",
+     "era5_min_temp_c_2024_08_15",
+     "era5_max_temp_c_2024_08_15",
+     "satellite_evidence",
+     "glof_label",
+     "label_status",
+     "train_test_group",
+     "notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "sample_id": "THAME_GLOF_20240816_001",
+     "event_id": "THAME_GLOF_2024",
+     "event_date": "2024-08-16",
+     "location": "Thame Valley, Solukhumbu, Nepal",
+     "village_elevation_m": 3800,
+     "upper_lake_elevation_m": 4890,
+     "lower_lake_elevation_m": 4718,
+     "upper_lake_pre_area_km2": 0.11,
+     "upper_lake_area_uncertainty_km2": 0.004,
+     "upper_lake_area_change_km2": -0.013,
+     "lower_lake_pre_area_km2": 0.048,
+     "lower_lake_post_area_km2": 0.015,
+     "lower_lake_area_change_km2": -0.033,
+     "upper_lake_catchment_km2": 5,
+     "lower_lake_catchment_km2": 9,
+     "upper_lake_drained_volume_m3": 410000,
+     "lower_lake_drained_volume_m3": 360000,
+     "total_drained_volume_m3": 770000,
+     "lower_lake_level_drop_m": 12,
+     "lower_dam_incision_m": 30,
+     "rainfall_14d_mm_phortse": 124,
+     "era5_min_temp_c_2024_08_15": 3.7,
+     "era5_max_temp_c_2024_08_15": 9.7,
+     "satellite_evidence": "Sentinel-1 damage proxy (19-Aug-2024); ALOS-2 flood proxy (24-Aug-2024); article multi-source imagery",
+     "glof_label": 1,
+     "label_status": "Documented event; event-level label, not pixel label",
+     "train_test_group": "THAME_EVENT_ONLY",
+     "notes": "One documented positive event. Negative/background GLOF samples and pixel-level predictor values are unavailable. 14-day precipitation is cumulative Phortse AWS, not daily rainfall."
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Landslide_Event_Data",
+   "n_rows": 1,
+   "n_columns": 17,
+   "columns": [
+    {
+     "name": "sample_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_LS_20240817_AGG"
+     ]
+    },
+    {
+     "name": "event_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_GLOF_2024"
+     ]
+    },
+    {
+     "name": "event_date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "2024-08-16"
+     ],
+     "min": "2024-08-16T00:00:00",
+     "max": "2024-08-16T00:00:00"
+    },
+    {
+     "name": "inventory_image_date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "2024-08-17"
+     ],
+     "min": "2024-08-17T00:00:00",
+     "max": "2024-08-17T00:00:00"
+    },
+    {
+     "name": "location",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "Thame Village, Solukhumbu District, Nepal"
+     ]
+    },
+    {
+     "name": "satellite_mission",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "PlanetScope"
+     ]
+    },
+    {
+     "name": "image_resolution_m",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      3
+     ],
+     "min": 3,
+     "max": 3,
+     "mean": 3.0
+    },
+    {
+     "name": "landslide_extent_ha",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      140
+     ],
+     "min": 140,
+     "max": 140,
+     "mean": 140.0
+    },
+    {
+     "name": "landslide_extent_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      1.4
+     ],
+     "min": 1.4,
+     "max": 1.4,
+     "mean": 1.4
+    },
+    {
+     "name": "potentially_damaged_structures",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      43
+     ],
+     "min": 43,
+     "max": 43,
+     "mean": 43.0
+    },
+    {
+     "name": "affected_roads_paths_km",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      2
+     ],
+     "min": 2,
+     "max": 2,
+     "mean": 2.0
+    },
+    {
+     "name": "landslide_label",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      1
+     ],
+     "min": 1,
+     "max": 1,
+     "mean": 1.0
+    },
+    {
+     "name": "label_status",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "PRELIMINARY_NOT_FIELD_VALIDATED"
+     ]
+    },
+    {
+     "name": "inventory_source",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "UNITAR-UNOSAT LS20240818NPL"
+     ]
+    },
+    {
+     "name": "analysis_area_km2",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      2700
+     ],
+     "min": 2700,
+     "max": 2700,
+     "mean": 2700.0
+    },
+    {
+     "name": "train_test_group",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_EVENT_ONLY"
+     ]
+    },
+    {
+     "name": "notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "UNOSAT reports approx. 140 ha of satellite-detected landslide scars; preliminary assessment. Aggregate map statistic only: no individual polygon/pixel attributes or negative samples in this workbook."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "sample_id",
+     "event_id"
+    ],
+    "date_columns": [
+     "event_date",
+     "inventory_image_date"
+    ],
+    "feature_candidates": [
+     "location",
+     "satellite_mission",
+     "image_resolution_m",
+     "landslide_extent_ha",
+     "landslide_extent_km2",
+     "potentially_damaged_structures",
+     "affected_roads_paths_km",
+     "landslide_label",
+     "label_status",
+     "inventory_source",
+     "analysis_area_km2",
+     "train_test_group",
+     "notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "sample_id": "THAME_LS_20240817_AGG",
+     "event_id": "THAME_GLOF_2024",
+     "event_date": "2024-08-16",
+     "inventory_image_date": "2024-08-17",
+     "location": "Thame Village, Solukhumbu District, Nepal",
+     "satellite_mission": "PlanetScope",
+     "image_resolution_m": 3,
+     "landslide_extent_ha": 140,
+     "landslide_extent_km2": 1.4,
+     "potentially_damaged_structures": 43,
+     "affected_roads_paths_km": 2,
+     "landslide_label": 1,
+     "label_status": "PRELIMINARY_NOT_FIELD_VALIDATED",
+     "inventory_source": "UNITAR-UNOSAT LS20240818NPL",
+     "analysis_area_km2": 2700,
+     "train_test_group": "THAME_EVENT_ONLY",
+     "notes": "UNOSAT reports approx. 140 ha of satellite-detected landslide scars; preliminary assessment. Aggregate map statistic only: no individual polygon/pixel attributes or negative samples in this workbook."
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Satellite_Observations",
+   "n_rows": 10,
+   "n_columns": 12,
+   "columns": [
+    {
+     "name": "record_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 10,
+     "examples": [
+      "SAT01",
+      "SAT02",
+      "SAT03",
+      "SAT04",
+      "SAT05"
+     ]
+    },
+    {
+     "name": "event_id",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "THAME_GLOF_2024"
+     ]
+    },
+    {
+     "name": "acquisition_date",
+     "kind": "datetime",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      "2024-08-17",
+      "2024-04-07",
+      "2024-08-19",
+      "2024-08-24",
+      "2022-10-22"
+     ],
+     "min": "2022-10-22T00:00:00",
+     "max": "2024-08-25T00:00:00"
+    },
+    {
+     "name": "platform_or_mission",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 7,
+     "examples": [
+      "PlanetScope",
+      "Gaofen-2",
+      "Sentinel-1",
+      "ALOS-2",
+      "EOS-04"
+     ]
+    },
+    {
+     "name": "sensor_or_product",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 6,
+     "examples": [
+      "Optical imagery",
+      "EOS-RS Damage Proxy Map v0.9",
+      "JAXA Flood Proxy Map",
+      "Level 2.1",
+      "SAR scene"
+     ]
+    },
+    {
+     "name": "polarization_or_band",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      "Multispectral",
+      "Not specified",
+      "SAR; numeric pol values unavailable",
+      "SAR; product metadata not fully stated",
+      "HH"
+     ]
+    },
+    {
+     "name": "resolution_m",
+     "kind": "numeric",
+     "missing_fraction": 0.6,
+     "n_unique": 3,
+     "examples": [
+      3.0,
+      1.0,
+      0.65
+     ],
+     "min": 0.65,
+     "max": 3.0,
+     "mean": 1.4125
+    },
+    {
+     "name": "observation_or_product_type",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 8,
+     "examples": [
+      "Landslide/mudslide inventory imagery",
+      "Pre-event reference imagery",
+      "SAR-derived damage proxy map",
+      "Flood proxy map; downloadable shapefile set listed",
+      "Pre-event SAR scene"
+     ]
+    },
+    {
+     "name": "coverage_or_target",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 5,
+     "examples": [
+      "Thame Village",
+      "Thame GLOF affected area",
+      "Thame flood area",
+      "Thame region",
+      "Upper/lower Ngole lake area"
+     ]
+    },
+    {
+     "name": "data_status",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 7,
+     "examples": [
+      "Observed; UNOSAT preliminary analysis",
+      "Observed; used as before image by UNOSAT",
+      "Product listed; raster values not extracted",
+      "Product listed; geometries not ingested",
+      "Scene listed; pixel values not extracted"
+     ]
+    },
+    {
+     "name": "source",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "https://unosat.org/static/unosat_filesystem/3919/UNOSAT_A3_Natural_Landscape_LS20240818NPL_Nepal_20Aug2024.pdf",
+      "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+      "https://nhess.copernicus.org/articles/26/4131/2026/"
+     ]
+    },
+    {
+     "name": "notes",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 9,
+     "examples": [
+      "UNOSAT says image acquired 17-Aug-2024 09:58 local (04:13 UTC); approx. 140 ha scar extent.",
+      "UNOSAT map identifies Gaofen-2 7-Apr-2024 as before imagery; resolution 1 m.",
+      "Sentinel Asia lists EOS-RS DPM as observed by Sentinel-1 image 19-Aug-2024. This is a damage proxy product, not a direct per-pixel landslide ground-truth label.",
+      "Sentinel Asia lists JAXA ALOS-2 Flood Proxy Map dated 24-Aug-2024 and a shapefile set.",
+      "JAXA scene metadata: IMG HH ALOS2 45446/0540, 22-Oct-2022."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "record_id"
+    ],
+    "date_columns": [
+     "acquisition_date"
+    ],
+    "feature_candidates": [
+     "event_id",
+     "platform_or_mission",
+     "sensor_or_product",
+     "polarization_or_band",
+     "resolution_m",
+     "observation_or_product_type",
+     "coverage_or_target",
+     "data_status",
+     "source",
+     "notes"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "record_id": "SAT01",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-17",
+     "platform_or_mission": "PlanetScope",
+     "sensor_or_product": "Optical imagery",
+     "polarization_or_band": "Multispectral",
+     "resolution_m": 3.0,
+     "observation_or_product_type": "Landslide/mudslide inventory imagery",
+     "coverage_or_target": "Thame Village",
+     "data_status": "Observed; UNOSAT preliminary analysis",
+     "source": "https://unosat.org/static/unosat_filesystem/3919/UNOSAT_A3_Natural_Landscape_LS20240818NPL_Nepal_20Aug2024.pdf",
+     "notes": "UNOSAT says image acquired 17-Aug-2024 09:58 local (04:13 UTC); approx. 140 ha scar extent."
+    },
+    {
+     "record_id": "SAT02",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-04-07",
+     "platform_or_mission": "Gaofen-2",
+     "sensor_or_product": "Optical imagery",
+     "polarization_or_band": "Not specified",
+     "resolution_m": 1.0,
+     "observation_or_product_type": "Pre-event reference imagery",
+     "coverage_or_target": "Thame Village",
+     "data_status": "Observed; used as before image by UNOSAT",
+     "source": "https://unosat.org/static/unosat_filesystem/3919/UNOSAT_A3_Natural_Landscape_LS20240818NPL_Nepal_20Aug2024.pdf",
+     "notes": "UNOSAT map identifies Gaofen-2 7-Apr-2024 as before imagery; resolution 1 m."
+    },
+    {
+     "record_id": "SAT03",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-19",
+     "platform_or_mission": "Sentinel-1",
+     "sensor_or_product": "EOS-RS Damage Proxy Map v0.9",
+     "polarization_or_band": "SAR; numeric pol values unavailable",
+     "resolution_m": null,
+     "observation_or_product_type": "SAR-derived damage proxy map",
+     "coverage_or_target": "Thame GLOF affected area",
+     "data_status": "Product listed; raster values not extracted",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "Sentinel Asia lists EOS-RS DPM as observed by Sentinel-1 image 19-Aug-2024. This is a damage proxy product, not a direct per-pixel landslide ground-truth label."
+    },
+    {
+     "record_id": "SAT04",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-24",
+     "platform_or_mission": "ALOS-2",
+     "sensor_or_product": "JAXA Flood Proxy Map",
+     "polarization_or_band": "SAR; product metadata not fully stated",
+     "resolution_m": null,
+     "observation_or_product_type": "Flood proxy map; downloadable shapefile set listed",
+     "coverage_or_target": "Thame flood area",
+     "data_status": "Product listed; geometries not ingested",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "Sentinel Asia lists JAXA ALOS-2 Flood Proxy Map dated 24-Aug-2024 and a shapefile set."
+    },
+    {
+     "record_id": "SAT05",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2022-10-22",
+     "platform_or_mission": "ALOS-2",
+     "sensor_or_product": "Level 2.1",
+     "polarization_or_band": "HH",
+     "resolution_m": null,
+     "observation_or_product_type": "Pre-event SAR scene",
+     "coverage_or_target": "Thame region",
+     "data_status": "Scene listed; pixel values not extracted",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "JAXA scene metadata: IMG HH ALOS2 45446/0540, 22-Oct-2022."
+    },
+    {
+     "record_id": "SAT06",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-24",
+     "platform_or_mission": "ALOS-2",
+     "sensor_or_product": "Level 2.1",
+     "polarization_or_band": "HH",
+     "resolution_m": null,
+     "observation_or_product_type": "Post-event SAR scene",
+     "coverage_or_target": "Thame region",
+     "data_status": "Scene listed; pixel values not extracted",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "JAXA scene metadata: IMG HH ALOS2 55382/0540, 24-Aug-2024."
+    },
+    {
+     "record_id": "SAT07",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-25",
+     "platform_or_mission": "EOS-04",
+     "sensor_or_product": "SAR scene",
+     "polarization_or_band": "HH",
+     "resolution_m": null,
+     "observation_or_product_type": "Post-event SAR scene",
+     "coverage_or_target": "Thame region",
+     "data_status": "Scene listed; pixel values not extracted",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "ISRO metadata: strip 18138, scene 8, 11:41:29."
+    },
+    {
+     "record_id": "SAT08",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-25",
+     "platform_or_mission": "EOS-04",
+     "sensor_or_product": "SAR scene",
+     "polarization_or_band": "HV",
+     "resolution_m": null,
+     "observation_or_product_type": "Post-event SAR scene",
+     "coverage_or_target": "Thame region",
+     "data_status": "Scene listed; pixel values not extracted",
+     "source": "https://sentinel-asia.org/EO/2024/article20240816NP.html",
+     "notes": "ISRO metadata: strip 18138, scene 8, 11:41:29."
+    },
+    {
+     "record_id": "SAT09",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-08-18",
+     "platform_or_mission": "Gaofen-7",
+     "sensor_or_product": "Optical imagery",
+     "polarization_or_band": "Panchromatic/multispectral details not added",
+     "resolution_m": 0.65,
+     "observation_or_product_type": "Post-event high-resolution imagery",
+     "coverage_or_target": "Upper/lower Ngole lake area",
+     "data_status": "Used in paper; pixel values not extracted",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/",
+     "notes": "Paper cites Gaofen-7 imagery of 18-Aug-2024 at 0.65 m in iceberg and lake analysis."
+    },
+    {
+     "record_id": "SAT10",
+     "event_id": "THAME_GLOF_2024",
+     "acquisition_date": "2024-05-24",
+     "platform_or_mission": "UAV",
+     "sensor_or_product": "Drone DEM",
+     "polarization_or_band": "Elevation",
+     "resolution_m": 1.0,
+     "observation_or_product_type": "Pre/post lake surface reconstruction support",
+     "coverage_or_target": "Upper/lower Ngole lake area",
+     "data_status": "DEM acquisition reported in paper; raster not included",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/",
+     "notes": "Paper reports high-resolution 1 m UAV DEM acquired 24-May-2025; this is a 2025 acquisition, not 2024."
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Terrain_Observations",
+   "n_rows": 12,
+   "n_columns": 9,
+   "columns": [
+    {
+     "name": "record_id",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      "TER01",
+      "TER02",
+      "TER03",
+      "TER04",
+      "TER05"
+     ]
+    },
+    {
+     "name": "feature",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      "Thame village elevation",
+      "Upper Ngole lake elevation",
+      "Lower Ngole lake elevation",
+      "Upper lake catchment area",
+      "Lower lake catchment area"
+     ]
+    },
+    {
+     "name": "value",
+     "kind": "numeric",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      3800.0,
+      4890.0,
+      4718.0,
+      5.0,
+      9.0
+     ],
+     "min": 1.0,
+     "max": 4890.0,
+     "mean": 1214.5666666666666
+    },
+    {
+     "name": "unit",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 4,
+     "examples": [
+      "m a.s.l.",
+      "km2",
+      "m",
+      "degrees"
+     ]
+    },
+    {
+     "name": "spatial_scope",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 7,
+     "examples": [
+      "Village-level",
+      "Lake-level",
+      "Catchment-level",
+      "Localized terrain segment",
+      "Between lakes"
+     ]
+    },
+    {
+     "name": "measurement_or_source_method",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 3,
+     "examples": [
+      "Reported in NHESS paper",
+      "Calculated as atan(100/120)",
+      "UAV survey on 2025-05-24"
+     ]
+    },
+    {
+     "name": "status",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 6,
+     "examples": [
+      "Reported value",
+      "Approximate reported value",
+      "Reported approximate value",
+      "Derived from reported geometry",
+      "Model resolution"
+     ]
+    },
+    {
+     "name": "notes",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      "Approximate village elevation.",
+      "Upper lake at terminus of debris-covered glacier.",
+      "Lower Ngole / Ngole Pokhari.",
+      "Approx. 5 km².",
+      "Approx. 9 km²."
+     ]
+    },
+    {
+     "name": "source",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 1,
+     "examples": [
+      "https://nhess.copernicus.org/articles/26/4131/2026/"
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "record_id",
+     "feature",
+     "notes"
+    ],
+    "date_columns": [],
+    "feature_candidates": [
+     "value",
+     "unit",
+     "spatial_scope",
+     "measurement_or_source_method",
+     "status",
+     "source"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "record_id": "TER01",
+     "feature": "Thame village elevation",
+     "value": 3800.0,
+     "unit": "m a.s.l.",
+     "spatial_scope": "Village-level",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported value",
+     "notes": "Approximate village elevation.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER02",
+     "feature": "Upper Ngole lake elevation",
+     "value": 4890.0,
+     "unit": "m a.s.l.",
+     "spatial_scope": "Lake-level",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported value",
+     "notes": "Upper lake at terminus of debris-covered glacier.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER03",
+     "feature": "Lower Ngole lake elevation",
+     "value": 4718.0,
+     "unit": "m a.s.l.",
+     "spatial_scope": "Lake-level",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported value",
+     "notes": "Lower Ngole / Ngole Pokhari.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER04",
+     "feature": "Upper lake catchment area",
+     "value": 5.0,
+     "unit": "km2",
+     "spatial_scope": "Catchment-level",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Approximate reported value",
+     "notes": "Approx. 5 km².",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER05",
+     "feature": "Lower lake catchment area",
+     "value": 9.0,
+     "unit": "km2",
+     "spatial_scope": "Catchment-level",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Approximate reported value",
+     "notes": "Approx. 9 km².",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER06",
+     "feature": "Vertical drop of steep bedrock step",
+     "value": 100.0,
+     "unit": "m",
+     "spatial_scope": "Localized terrain segment",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported approximate value",
+     "notes": "Steepest section immediately adjacent to upper lake.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER07",
+     "feature": "Horizontal distance of steep bedrock step",
+     "value": 120.0,
+     "unit": "m",
+     "spatial_scope": "Localized terrain segment",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported approximate value",
+     "notes": "Geometry associated with TER06.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER08",
+     "feature": "Slope angle of reported bedrock step",
+     "value": 39.8,
+     "unit": "degrees",
+     "spatial_scope": "Localized terrain segment",
+     "measurement_or_source_method": "Calculated as atan(100/120)",
+     "status": "Derived from reported geometry",
+     "notes": "Approximate segment angle only; NOT a DEM raster slope measurement.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER09",
+     "feature": "Upper-to-lower lake vertical descent",
+     "value": 182.0,
+     "unit": "m",
+     "spatial_scope": "Between lakes",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported approximate value",
+     "notes": "Paper reports floodwaters descended approx. 182 m over approx. 700 m before entering lower lake.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER10",
+     "feature": "Upper-to-lower lake travel distance",
+     "value": 700.0,
+     "unit": "m",
+     "spatial_scope": "Between lakes",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Reported approximate value",
+     "notes": "Approximate path distance.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER11",
+     "feature": "HMA DEM simulation grid size",
+     "value": 10.0,
+     "unit": "m",
+     "spatial_scope": "Model domain",
+     "measurement_or_source_method": "Reported in NHESS paper",
+     "status": "Model resolution",
+     "notes": "HMA DEM used for r.avaflow simulations at 10 m cell size; source raster not embedded in workbook.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    },
+    {
+     "record_id": "TER12",
+     "feature": "UAV DEM resolution",
+     "value": 1.0,
+     "unit": "m",
+     "spatial_scope": "Lake area",
+     "measurement_or_source_method": "UAV survey on 2025-05-24",
+     "status": "Raster acquisition reported; raster unavailable",
+     "notes": "High-resolution DEM acquired 24-May-2025; do not treat as pre-event terrain.",
+     "source": "https://nhess.copernicus.org/articles/26/4131/2026/"
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  },
+  {
+   "name": "Feature_Availability",
+   "n_rows": 30,
+   "n_columns": 3,
+   "columns": [
+    {
+     "name": "Requested feature",
+     "kind": "identifier",
+     "missing_fraction": 0.0,
+     "n_unique": 30,
+     "examples": [
+      "VV backscatter",
+      "VH backscatter",
+      "HH backscatter",
+      "HV backscatter",
+      "SAR coherence"
+     ]
+    },
+    {
+     "name": "Availability",
+     "kind": "categorical",
+     "missing_fraction": 0.0,
+     "n_unique": 12,
+     "examples": [
+      "Unavailable",
+      "Scene metadata only",
+      "Available",
+      "Partly available",
+      "Unavailable as requested"
+     ]
+    },
+    {
+     "name": "Evidence / limitation",
+     "kind": "text",
+     "missing_fraction": 0.0,
+     "n_unique": 29,
+     "examples": [
+      "Scene/product references only; no numeric calibrated pixel values.",
+      "No numeric calibrated pixel values in source workbook/paper.",
+      "ALOS-2 HH scene and EOS-04 HH scene listed; numeric backscatter not extracted.",
+      "EOS-04 HV scene listed; numeric backscatter not extracted.",
+      "No interferometric coherence values."
+     ]
+    }
+   ],
+   "coordinates": null,
+   "suggestions": {
+    "target_candidates": [],
+    "group_candidates": [],
+    "identifier_columns": [
+     "Requested feature"
+    ],
+    "date_columns": [],
+    "feature_candidates": [
+     "Availability"
+    ],
+    "ml_ready": false,
+    "ml_note": "No binary target column detected."
+   },
+   "records": [
+    {
+     "Requested feature": "VV backscatter",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "Scene/product references only; no numeric calibrated pixel values."
+    },
+    {
+     "Requested feature": "VH backscatter",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No numeric calibrated pixel values in source workbook/paper."
+    },
+    {
+     "Requested feature": "HH backscatter",
+     "Availability": "Scene metadata only",
+     "Evidence / limitation": "ALOS-2 HH scene and EOS-04 HH scene listed; numeric backscatter not extracted."
+    },
+    {
+     "Requested feature": "HV backscatter",
+     "Availability": "Scene metadata only",
+     "Evidence / limitation": "EOS-04 HV scene listed; numeric backscatter not extracted."
+    },
+    {
+     "Requested feature": "SAR coherence",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No interferometric coherence values."
+    },
+    {
+     "Requested feature": "Backscatter difference",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "Cannot calculate without aligned numeric backscatter rasters."
+    },
+    {
+     "Requested feature": "Incidence angle",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "Not included in source workbook or reviewed product summary."
+    },
+    {
+     "Requested feature": "LOS displacement",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No InSAR displacement measurements."
+    },
+    {
+     "Requested feature": "Acquisition date",
+     "Availability": "Available",
+     "Evidence / limitation": "Scene dates recorded in Satellite_Observations."
+    },
+    {
+     "Requested feature": "Orbit direction",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "Not reported in the reviewed scene summaries."
+    },
+    {
+     "Requested feature": "Polarization",
+     "Availability": "Partly available",
+     "Evidence / limitation": "HH/HV scene metadata for selected products only."
+    },
+    {
+     "Requested feature": "Elevation",
+     "Availability": "Partly available",
+     "Evidence / limitation": "Lake and village elevations reported; no complete pixel DEM values."
+    },
+    {
+     "Requested feature": "Slope",
+     "Availability": "Partly available",
+     "Evidence / limitation": "One localized slope angle derived from reported 100 m / 120 m geometry; no slope raster."
+    },
+    {
+     "Requested feature": "Aspect",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No aspect raster values."
+    },
+    {
+     "Requested feature": "Curvature",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No curvature raster values."
+    },
+    {
+     "Requested feature": "TWI",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No TWI raster values."
+    },
+    {
+     "Requested feature": "Distance to river",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No spatially sampled distances."
+    },
+    {
+     "Requested feature": "Distance to road",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No spatially sampled distances."
+    },
+    {
+     "Requested feature": "Rainfall 1/3/7/30 days",
+     "Availability": "Unavailable as requested",
+     "Evidence / limitation": "Only 124 mm cumulative Phortse precipitation over a 14-day pre-event period is reported in source workbook."
+    },
+    {
+     "Requested feature": "Soil moisture",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No aligned soil moisture values."
+    },
+    {
+     "Requested feature": "NDVI",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No NDVI raster values."
+    },
+    {
+     "Requested feature": "Land cover",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No pixel-level land-cover classes."
+    },
+    {
+     "Requested feature": "Geology",
+     "Availability": "Partly described",
+     "Evidence / limitation": "Upper dam bedrock+moraine; lower dam moraine. Not a spatial geology raster."
+    },
+    {
+     "Requested feature": "Landslide label",
+     "Availability": "Available as aggregate only",
+     "Evidence / limitation": "UNOSAT ~140 ha satellite-detected scars; preliminary, not field validated; no polygon pixels ingested."
+    },
+    {
+     "Requested feature": "GLOF/flood label",
+     "Availability": "Available as event-level only",
+     "Evidence / limitation": "Thame GLOF is documented; Sentinel Asia lists flood proxy products, but per-pixel masks were not ingested."
+    },
+    {
+     "Requested feature": "Landslide severity/area",
+     "Availability": "Area aggregate only",
+     "Evidence / limitation": "~140 ha from UNOSAT; severity classes not supplied."
+    },
+    {
+     "Requested feature": "Landslide displacement",
+     "Availability": "Unavailable",
+     "Evidence / limitation": "No per-sample displacement data."
+    },
+    {
+     "Requested feature": "Change classification",
+     "Availability": "Product reference only",
+     "Evidence / limitation": "Damage proxy/flood proxy products are listed; numeric per-pixel change classes not ingested."
+    },
+    {
+     "Requested feature": "Latitude/longitude",
+     "Availability": "Unavailable per sample",
+     "Evidence / limitation": "Map coordinates are shown on UNOSAT map, but no sample-level coordinates/polygons were extracted."
+    },
+    {
+     "Requested feature": "Train/test group",
+     "Availability": "Placeholder only",
+     "Evidence / limitation": "Only one event is represented; cannot create a meaningful independent split."
+    }
+   ],
+   "records_truncated": false,
+   "preview_rows": 50
+  }
+ ]
+}

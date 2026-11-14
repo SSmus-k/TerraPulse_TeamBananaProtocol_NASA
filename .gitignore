@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Data / models (real data must not be committed)
+backend/data/raw/*
+!backend/data/raw/.gitkeep
+backend/models/*.joblib
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env.local
+*.tsbuildinfo
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+.claude

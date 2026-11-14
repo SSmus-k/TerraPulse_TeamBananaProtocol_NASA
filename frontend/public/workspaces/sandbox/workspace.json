@@ -1,0 +1,68 @@
+{
+  "id": "sandbox",
+  "name": "Interface sandbox",
+  "subtitle": "Placeholder terrain · illustrative scenario · synthetic ML",
+  "description": "Everything here is fabricated for interface and pipeline testing: procedural terrain, illustrative scenario, synthetic ML, and synthetic GeoTIFFs placed over open ocean. Nothing describes a real place or event.",
+  "region": {
+    "name": "Not a real location",
+    "center": [
+      86.65,
+      27.8
+    ],
+    "zoom": 9,
+    "centerNote": "The synthetic table carries invented coordinates; points on this map are NOT real observations."
+  },
+  "terrain": "placeholder",
+  "scenario": "illustrative-glof",
+  "datasets": [
+    {
+      "id": "placeholder",
+      "name": "Placeholder terrain (procedural)",
+      "format": "procedural",
+      "provenance": "placeholder",
+      "description": "Procedurally generated alpine valley with a cirque lake, for UI development. Not real topography."
+    },
+    {
+      "id": "synthetic-ml",
+      "name": "Synthetic baseline model (detection + forecast)",
+      "format": "ml-summary-json",
+      "url": "/data/ml_summary.json",
+      "provenance": "synthetic",
+      "description": "Random Forest results from backend synthetic data - pipeline check only."
+    },
+    {
+      "id": "synthetic-table",
+      "name": "Synthetic landslide feature table",
+      "format": "csv",
+      "url": "terrapulse_synthetic_v1.csv",
+      "provenance": "synthetic",
+      "description": "3,519 fabricated samples in 8 synthetic event groups (see docs/SYNTHETIC_DATA.md)."
+    },
+    {
+      "id": "syn-dem",
+      "name": "synthetic_dem_utm45.tif",
+      "format": "geotiff",
+      "url": "synthetic_dem_utm45.tif",
+      "provenance": "synthetic",
+      "description": "SYNTHETIC DEM GeoTIFF (UTM 45N) placed over open ocean to test the DEM → 3D pipeline. Not real terrain."
+    },
+    {
+      "id": "syn-sar-before",
+      "name": "synthetic_sar_VV_before.tif",
+      "format": "geotiff",
+      "url": "synthetic_sar_VV_before.tif",
+      "provenance": "synthetic",
+      "date": "2000-01-01",
+      "description": "SYNTHETIC SAR backscatter (dB) 'before' scene. Dates are placeholders."
+    },
+    {
+      "id": "syn-sar-after",
+      "name": "synthetic_sar_VV_after.tif",
+      "format": "geotiff",
+      "url": "synthetic_sar_VV_after.tif",
+      "provenance": "synthetic",
+      "date": "2000-02-01",
+      "description": "SYNTHETIC SAR 'after' scene with planted changes (+6 dB fan, −8 dB patch) to test change detection."
+    }
+  ]
+}
