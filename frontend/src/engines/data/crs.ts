@@ -38,6 +38,15 @@ export function toLonLat(crs: CrsInfo, x: number, y: number): [number, number] |
   return [lon, lat];
 }
 
+/** Convert [lon, lat] into `crs` coordinates. Returns null when unsupported. */
+export function fromLonLat(crs: CrsInfo, lon: number, lat: number): [number, number] | null {
+  const def = projDef(crs);
+  if (!def) return null;
+  if (def === "EPSG:4326") return [lon, lat];
+  const [x, y] = proj4("EPSG:4326", def, [lon, lat]);
+  return [x, y];
+}
+
 export function bboxCornersLonLat(crs: CrsInfo, b: [number, number, number, number]) {
   const tl = toLonLat(crs, b[0], b[3]), tr = toLonLat(crs, b[2], b[3]);
   const br = toLonLat(crs, b[2], b[1]), bl = toLonLat(crs, b[0], b[1]);

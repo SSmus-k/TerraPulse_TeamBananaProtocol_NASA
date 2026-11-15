@@ -91,6 +91,6 @@ export function datasetFromSpec(spec: WorkspaceDatasetSpec, baseUrl: string): Da
     id: spec.id, name: spec.name, kind: spec.kind ?? KIND_FOR[spec.format] ?? "raster", format: spec.format,
     provenance: spec.provenance, origin: "workspace", status: missing ? "missing" : "loading",
     citation: spec.citation, date: spec.date, description: spec.description, howTo: spec.howTo,
-    source: url ? { url } : undefined, notes: [],
+    source: url ? { url } : undefined, notes: [], display: spec.display, initiallyVisible: spec.visible,
   };
 }

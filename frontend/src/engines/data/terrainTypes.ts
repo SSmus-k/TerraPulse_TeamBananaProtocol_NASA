@@ -3,7 +3,7 @@
  * procedural placeholder) is converted to a `TerrainGrid`; every overlay
  * draped on it is an RGBA image covering the same extent.
  */
-import type { Provenance } from "./types";
+import type { CrsInfo, Provenance } from "./types";
 
 export interface TerrainGrid {
   cols: number;
@@ -17,6 +17,8 @@ export interface TerrainGrid {
   provenance: { kind: Provenance; label: string; source: string; crs?: string };
   /** Native-CRS bbox the grid covers (used to drape other rasters). */
   bbox?: [number, number, number, number];
+  /** CRS of `bbox` (needed to place lon/lat targets, e.g. story cameras). */
+  crs?: CrsInfo;
   /** Optional named features (normalised grid coords) used by the illustrative scenario. */
   features?: PlaceholderFeatures;
 }
@@ -40,7 +42,11 @@ export interface TerrainOverlay {
   cols: number;
   rows: number;
   opacity: number;
+  /** false = draw unlit (photos already contain real shading); default true. */
+  shaded?: boolean;
   provenance: Provenance;
+  /** Arrival time (s) per cell for animated flood layers; NaN = dry. */
+  timeField?: Float32Array;
   /** Optional raw values for hover read-out (same cols/rows). */
   values?: Float32Array;
   unit?: string;

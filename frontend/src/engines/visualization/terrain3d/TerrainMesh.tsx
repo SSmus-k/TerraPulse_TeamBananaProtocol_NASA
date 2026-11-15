@@ -1,4 +1,4 @@
-import type { ThreeEvent } from "@react-three/fiber";
+import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import type { ShadingMode, TerrainGrid, TerrainOverlay } from "../../data/terrainTypes";
@@ -45,16 +45,30 @@ export function TerrainMesh({ grid, slope, hillshade, exaggeration, shading, vis
   );
 }
 
-/** An RGBA overlay drawn on the shared terrain geometry (grid-aligned UVs, any resolution). */
+/** An RGBA overlay drawn on the shared terrain geometry (grid-aligned UVs, any resolution). Opacity changes fade. */
 export function OverlayMesh({ geometry, overlay, order }: { geometry: THREE.BufferGeometry; overlay: TerrainOverlay; order: number }) {
-  const texture = useMemo(() => rgbaToTexture(overlay.rgba, overlay.cols, overlay.rows), [overlay]);
+  const texture = useMemo(() => rgbaToTexture(overlay.rgba, overlay.cols, overlay.rows), [overlay.rgba, overlay.cols, overlay.rows]);
   useEffect(() => () => texture.dispose(), [texture]);
+  const mesh = useRef<THREE.Mesh>(null);
+  const mat = useRef<THREE.Material>(null);
+  useFrame((_, dt) => {
+    if (!mat.current || !mesh.current) return;
+    const target = overlay.opacity;
+    const cur = mat.current.opacity;
+    mat.current.opacity = Math.abs(target - cur) < 0.01 ? target : cur + (target - cur) * Math.min(1, dt * 2.5); // ~1 s fade
+    mesh.current.visible = mat.current.opacity > 0.01;
+  });
   return (
-    <mesh geometry={geometry} renderOrder={10 + order} raycast={() => null}>
-      <meshLambertMaterial
-        map={texture} transparent opacity={overlay.opacity} depthWrite={false}
-        polygonOffset polygonOffsetFactor={-2 - order} polygonOffsetUnits={-2 - order} side={THREE.DoubleSide}
-      />
+    <mesh ref={mesh} geometry={geometry} renderOrder={10 + order} raycast={() => null}>
+      {overlay.shaded === false ? (
+        <meshBasicMaterial ref={mat as React.RefObject<THREE.MeshBasicMaterial>}
+          map={texture} transparent opacity={0} depthWrite={false} toneMapped={false}
+          polygonOffset polygonOffsetFactor={-2 - order} polygonOffsetUnits={-2 - order} side={THREE.DoubleSide} />
+      ) : (
+        <meshLambertMaterial ref={mat as React.RefObject<THREE.MeshLambertMaterial>}
+          map={texture} transparent opacity={0} depthWrite={false}
+          polygonOffset polygonOffsetFactor={-2 - order} polygonOffsetUnits={-2 - order} side={THREE.DoubleSide} />
+      )}
     </mesh>
   );
 }

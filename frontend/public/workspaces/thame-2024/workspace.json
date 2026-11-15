@@ -2,10 +2,13 @@
   "id": "thame-2024",
   "name": "Thame GLOF 2024",
   "subtitle": "Thame valley, Solukhumbu, Nepal · cascading glacial lake outburst, 16 Aug 2024",
-  "description": "Showcase workspace. Reported evidence is loaded; satellite rasters (DEM, Sentinel-1, NISAR) and mapped footprints are listed under 'Awaiting data' with instructions.",
+  "description": "Real data: Copernicus DEM terrain, Sentinel-2 before/after images, Sentinel-1 radar pairs around the 16 Aug 2024 outburst and the derived radar change map, plus the team's evidence workbook. NISAR scenes and official mapped footprints are listed under 'Awaiting data'.",
   "region": {
     "name": "Thame valley, Solukhumbu, Nepal",
-    "center": [86.649, 27.832],
+    "center": [
+      86.649,
+      27.832
+    ],
     "zoom": 12,
     "centerNote": "Map centre is the approximate location of Thame village; no event geometry is drawn until mapped footprints are added."
   },
@@ -21,30 +24,171 @@
     },
     {
       "id": "dem",
-      "name": "Copernicus DEM GLO-30",
+      "name": "Copernicus DEM GLO-30 (Thame window)",
       "kind": "dem",
       "format": "geotiff",
-      "url": null,
+      "url": "dem_glo30.tif",
       "provenance": "real-satellite",
-      "howTo": "Download the Copernicus GLO-30 tile covering Thame (N27 E086) e.g. via OpenTopography or the AWS open-data bucket, clip to the valley, save as dem_glo30.tif in frontend/public/workspaces/thame-2024/ and set \"url\": \"dem_glo30.tif\" here."
+      "citation": "Copernicus DEM GLO-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA; all rights reserved. Clipped from tile N27 E086 (AWS open data).",
+      "description": "30 m digital surface model, 86.55–86.75°E, 27.78–27.93°N (EPSG:4326). Surface model from TanDEM-X acquisitions (2011–2015): it shows the pre-2024 landscape, not post-event change."
     },
     {
-      "id": "s1-before",
-      "name": "Sentinel-1 RTC (before event)",
-      "kind": "sar",
+      "id": "s2-before",
+      "name": "Sentinel-2 true colour · 24 Oct 2023 (before)",
+      "kind": "optical",
       "format": "geotiff",
-      "url": null,
+      "url": "s2_rgb_20231024.tif",
       "provenance": "real-satellite",
-      "howTo": "In ASF Vertex, find a Sentinel-1 IW scene over Thame acquired shortly BEFORE 16 Aug 2024, order an RTC product via HyP3 (free Earthdata login), and add the VV GeoTIFF here with its acquisition date."
+      "date": "2023-10-24",
+      "citation": "Contains modified Copernicus Sentinel data 2023, processed by ESA. Sentinel-2 L2A true colour via Element 84 Earth Search (AWS Open Data). Resampled by TerraPulse onto the DEM grid.",
+      "description": "Cloud-free optical image of the valley before the 2024 event (same season as the after image).",
+      "visible": false
     },
     {
-      "id": "s1-after",
-      "name": "Sentinel-1 RTC (after event)",
+      "id": "s2-after",
+      "name": "Sentinel-2 true colour · 7 Nov 2024 (after)",
+      "kind": "optical",
+      "format": "geotiff",
+      "url": "s2_rgb_20241107.tif",
+      "provenance": "real-satellite",
+      "date": "2024-11-07",
+      "citation": "Contains modified Copernicus Sentinel data 2024, processed by ESA. Sentinel-2 L2A true colour via Element 84 Earth Search (AWS Open Data). Resampled by TerraPulse onto the DEM grid.",
+      "description": "Cloud-free optical image ~12 weeks after the event.",
+      "visible": false
+    },
+    {
+      "id": "s1-change-desc",
+      "name": "Radar change Δσ° · descending 10 → 22 Aug 2024",
+      "kind": "change",
+      "format": "geotiff",
+      "url": "s1_change_desc_0810_0822.tif",
+      "provenance": "derived",
+      "date": "2024-08-22",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "description": "Δσ° = σ°(22 Aug) − σ°(10 Aug) in dB, VV, Sentinel-1 relative orbit 121, 3×3 mean filter. Orange = brighter after (e.g. exposed lake bed, debris), blue = darker. Values within ±3 dB hidden.",
+      "display": {
+        "threshold": 3,
+        "range": 8
+      },
+      "visible": false
+    },
+    {
+      "id": "s1-change-asc",
+      "name": "Radar change Δσ° · ascending 7 → 19 Aug 2024",
+      "kind": "change",
+      "format": "geotiff",
+      "url": "s1_change_asc_0807_0819.tif",
+      "provenance": "derived",
+      "date": "2024-08-19",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "description": "Δσ° = σ°(19 Aug) − σ°(7 Aug) in dB, VV, relative orbit 85 (75% of the window covered). Independent look direction: cross-check for the descending pair.",
+      "display": {
+        "threshold": 3,
+        "range": 8
+      },
+      "visible": false
+    },
+    {
+      "id": "lakes-before",
+      "name": "Ngole cirque water · 24 Oct 2023",
+      "kind": "mask",
+      "format": "geotiff",
+      "url": "ngole_water_20231024.tif",
+      "provenance": "derived",
+      "date": "2023-10-24",
+      "citation": "Water from the Sentinel-2 NDWI (McFeeters, >0.2) within 900 m of the Ngole cirque. Identification as the Ngole lakes is INFERRED by TerraPulse from reported elevations (4,890 / 4,718 m) and areas (0.110 / 0.048 km²) - confirm against the NHESS (2026) maps.",
+      "display": {
+        "color": "#3fa9f5"
+      },
+      "visible": true
+    },
+    {
+      "id": "lakes-after",
+      "name": "Ngole cirque water · 7 Nov 2024",
+      "kind": "mask",
+      "format": "geotiff",
+      "url": "ngole_water_20241107.tif",
+      "provenance": "derived",
+      "date": "2024-11-07",
+      "citation": "Water from the Sentinel-2 NDWI (McFeeters, >0.2) within 900 m of the Ngole cirque. Identification as the Ngole lakes is INFERRED by TerraPulse from reported elevations (4,890 / 4,718 m) and areas (0.110 / 0.048 km²) - confirm against the NHESS (2026) maps. Snow partly covers the upper lake in this image, so its area is under-detected.",
+      "display": {
+        "color": "#3fa9f5"
+      },
+      "visible": false
+    },
+    {
+      "id": "flood-sim",
+      "name": "Flood simulation (simplified) · arrival time",
+      "kind": "flood-sim",
+      "format": "geotiff",
+      "url": "flood_sim_arrival.tif",
+      "provenance": "model",
+      "date": "2024-08-16",
+      "citation": "TerraPulse simplified flood model (not a hydraulic simulation): water routed down the steepest path of the depression-filled Copernicus DEM from the lower Ngole lake; flooded corridor = terrain ≤ 5 m above the path within 300 m (reported max flow height ~4 m + ~1 m DEM tolerance); front timing scaled to the published r.avaflow scenario A arrival at Thame (~1,300 s, NHESS 2026) and extrapolated downstream at the same mean speed (7.14 m/s). The path matches the debris channel visible in Sentinel-2, 7 Nov 2024.",
+      "description": "Seconds after the outburst at which the flood front reaches each cell. Path 19.7 km, 9.3 km to Thame, corridor 4.45 km².",
+      "visible": false,
+      "display": {
+        "pathUrl": "flood_sim_path.json"
+      }
+    },
+    {
+      "id": "osm",
+      "name": "Buildings, trails & rivers (OpenStreetMap)",
+      "kind": "vector",
+      "format": "geojson",
+      "url": "osm_thame.geojson",
+      "provenance": "observed",
+      "citation": "© OpenStreetMap contributors, ODbL. Current mapping (2026): some buildings may have been rebuilt or added after the 2024 event. `flood_arrival_s` = arrival of the modelled flood at each building (TerraPulse).",
+      "description": "1,795 mapped buildings, 494 trails, 178 rivers/streams. In 3D, buildings turn red when the modelled flood reaches them.",
+      "visible": true
+    },
+    {
+      "id": "s1-desc-before",
+      "name": "Sentinel-1 RTC VV · 2024-08-10 (orbit 121 descending)",
       "kind": "sar",
       "format": "geotiff",
-      "url": null,
+      "url": "s1_vv_desc_20240810.tif",
       "provenance": "real-satellite",
-      "howTo": "Same orbit/track as the 'before' scene, acquired AFTER 16 Aug 2024 (the evidence workbook lists a 19 Aug 2024 Sentinel-1 acquisition used by Sentinel Asia). Process with HyP3 RTC using the same settings, add the VV GeoTIFF with its date, then run 'Detect change'."
+      "date": "2024-08-10",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "visible": false,
+      "description": "Linear γ° backscatter. Select it and use 'Detect change' with its partner date to recompute Δσ°."
+    },
+    {
+      "id": "s1-desc-after",
+      "name": "Sentinel-1 RTC VV · 2024-08-22 (orbit 121 descending)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": "s1_vv_desc_20240822.tif",
+      "provenance": "real-satellite",
+      "date": "2024-08-22",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "visible": false,
+      "description": "Linear γ° backscatter. Select it and use 'Detect change' with its partner date to recompute Δσ°."
+    },
+    {
+      "id": "s1-asc-before",
+      "name": "Sentinel-1 RTC VV · 2024-08-07 (orbit 85 ascending)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": "s1_vv_asc_20240807.tif",
+      "provenance": "real-satellite",
+      "date": "2024-08-07",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "visible": false,
+      "description": "Linear γ° backscatter. Select it and use 'Detect change' with its partner date to recompute Δσ°."
+    },
+    {
+      "id": "s1-asc-after",
+      "name": "Sentinel-1 RTC VV · 2024-08-19 (orbit 85 ascending)",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": "s1_vv_asc_20240819.tif",
+      "provenance": "real-satellite",
+      "date": "2024-08-19",
+      "citation": "Contains modified Copernicus Sentinel data 2024. Sentinel-1 RTC (radiometrically terrain corrected) from Microsoft Planetary Computer, CC BY 4.0. Resampled by TerraPulse onto the DEM grid (VV, ~30 m multilook).",
+      "visible": false,
+      "description": "Linear γ° backscatter. Select it and use 'Detect change' with its partner date to recompute Δσ°."
     },
     {
       "id": "nisar",
@@ -73,5 +217,337 @@
       "provenance": "observed",
       "howTo": "Sentinel Asia lists a shapefile set for the 24 Aug 2024 ALOS-2 flood proxy map. Convert to GeoJSON (WGS84) and add it here."
     }
-  ]
+  ],
+  "story": {
+    "title": "The 2024 Thame glacial lake outburst",
+    "exaggeration": 1.4,
+    "attribution": "Copernicus DEM GLO-30 © DLR/Airbus; contains modified Copernicus Sentinel data 2023-2024 (Sentinel-1 RTC via Microsoft Planetary Computer, CC BY 4.0; Sentinel-2 via Earth Search/AWS); high-res context imagery © Esri, Maxar, Earthstar Geographics (date varies).",
+    "scenes": [
+      {
+        "duration": 5,
+        "title": "The 2024 Thame Glacial Lake Outburst",
+        "subtitle": "Thame valley, Solukhumbu, Nepal · 16 August 2024",
+        "layers": [],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.2,
+          "bearing": 200,
+          "elevation": 42,
+          "drift": 2
+        }
+      },
+      {
+        "duration": 8,
+        "caption": "The Thame valley in October 2023, before the flood: a Sentinel-2 satellite image on real 30 m terrain.",
+        "source": "Copernicus Sentinel-2 (24 Oct 2023) · Copernicus DEM GLO-30",
+        "provenance": "real-satellite",
+        "layers": [
+          "s2-before"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.0,
+          "bearing": 190,
+          "elevation": 50,
+          "drift": 3
+        }
+      },
+      {
+        "duration": 9,
+        "caption": "At the head of the valley sit two glacial lakes, matching the reported Upper (~4,890 m) and Lower (~4,718 m) Ngole lakes.",
+        "source": "Sentinel-2 water index; identification inferred from elevations and areas in NHESS (2026), nhess-26-4131-2026",
+        "provenance": "derived",
+        "layers": [
+          "s2-before",
+          "lakes-before"
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.569,
+              27.83
+            ]
+          },
+          "distance": 0.45,
+          "bearing": 90,
+          "elevation": 52,
+          "drift": 1.5
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.564,
+                27.8333
+              ]
+            },
+            "label": "Upper Ngole (inferred)"
+          },
+          {
+            "target": {
+              "lonlat": [
+                86.573,
+                27.8278
+              ]
+            },
+            "label": "Lower Ngole (inferred)"
+          }
+        ]
+      },
+      {
+        "duration": 11,
+        "caption": "16 August 2024: the upper lake burst into the lower lake, whose moraine dam failed. The lower lake dropped ~12 m (outline shrinks); Sentinel-1 radar shows strong brightening (orange) on the drained lake bed.",
+        "source": "Copernicus Sentinel-1 RTC Δσ° VV, 10 → 22 Aug 2024 · event: NHESS (2026), nhess-26-4131-2026",
+        "provenance": "derived",
+        "layers": [
+          "s2-before",
+          "lakes-after",
+          "s1-change-desc"
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.569,
+              27.83
+            ]
+          },
+          "distance": 0.22,
+          "bearing": 80,
+          "elevation": 52,
+          "drift": -1
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.573,
+                27.8278
+              ]
+            },
+            "label": "Lower lake: radar brightening"
+          }
+        ]
+      },
+      {
+        "duration": 13,
+        "caption": "Simulated flood: about 770,000 m³ of water and debris surge down the steepest path of the valley.",
+        "source": "TerraPulse simplified model on Copernicus DEM · volume: NHESS (2026)",
+        "provenance": "model",
+        "layers": [
+          "s2-before",
+          "flood-sim",
+          "osm"
+        ],
+        "simulation": {
+          "from": 0,
+          "to": 700,
+          "label": "time after the outburst · simplified model"
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.573,
+                27.8278
+              ]
+            },
+            "label": "Lower Ngole (inferred)"
+          }
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.595,
+              27.826
+            ]
+          },
+          "distance": 0.42,
+          "bearing": 200,
+          "elevation": 48,
+          "drift": 2
+        }
+      },
+      {
+        "duration": 12,
+        "caption": "The flood front races down the narrow valley towards Thame, carrying boulders and mud (debris illustrative).",
+        "source": "Timing, depth, speed: r.avaflow scenario A, NHESS (2026) · path: TerraPulse",
+        "provenance": "model",
+        "layers": [
+          "context-imagery",
+          "flood-sim",
+          "osm"
+        ],
+        "simulation": {
+          "from": 700,
+          "to": 1150,
+          "label": "time after the outburst · simplified model"
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.649,
+                27.832
+              ]
+            },
+            "label": "Thame village"
+          }
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.63,
+              27.83
+            ]
+          },
+          "distance": 0.3,
+          "bearing": 165,
+          "elevation": 42,
+          "drift": 2
+        }
+      },
+      {
+        "duration": 14,
+        "caption": "About 22 minutes after the outburst the front reaches Thame. In the model, 62 of the 189 mapped buildings within 800 m of the village lie in the flood path (red); reports: 45 owners' houses and lodges, the school and trails affected.",
+        "source": "Buildings: OpenStreetMap · flood: TerraPulse simplified model · reported impacts: NHESS (2026) Table 6",
+        "provenance": "model",
+        "layers": [
+          "context-imagery",
+          "flood-sim",
+          "osm"
+        ],
+        "simulation": {
+          "from": 1150,
+          "to": 1500,
+          "label": "time after the outburst · simplified model"
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.649,
+                27.832
+              ]
+            },
+            "label": "Thame village"
+          }
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.649,
+              27.832
+            ]
+          },
+          "distance": 0.14,
+          "bearing": 150,
+          "elevation": 40,
+          "drift": 1.5
+        }
+      },
+      {
+        "duration": 9,
+        "caption": "Flows ~4 m deep at ~10 m/s reached the village around 13:30. 135 people were displaced. Radar brightening near Thame fits the debris deposits.",
+        "source": "NHESS (2026), nhess-26-4131-2026 (Table 6) · Sentinel-1 Δσ°",
+        "provenance": "observed",
+        "layers": [
+          "s2-after",
+          "s1-change-desc",
+          "osm"
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.649,
+              27.832
+            ]
+          },
+          "distance": 0.35,
+          "bearing": 140,
+          "elevation": 50,
+          "drift": 3
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.649,
+                27.832
+              ]
+            },
+            "label": "Thame village"
+          }
+        ]
+      },
+      {
+        "duration": 9,
+        "caption": "November 2024: the lower lake is much smaller (reported 0.048 → 0.015 km²). Snow partly covers the upper lake in this image.",
+        "source": "Copernicus Sentinel-2 (7 Nov 2024) · NHESS (2026), nhess-26-4131-2026",
+        "provenance": "real-satellite",
+        "layers": [
+          "s2-after",
+          "lakes-after",
+          "osm"
+        ],
+        "camera": {
+          "target": {
+            "lonlat": [
+              86.569,
+              27.83
+            ]
+          },
+          "distance": 0.45,
+          "bearing": 90,
+          "elevation": 52,
+          "drift": 1.5
+        },
+        "markers": [
+          {
+            "target": {
+              "lonlat": [
+                86.573,
+                27.8278
+              ]
+            },
+            "label": "Lower Ngole (inferred)"
+          }
+        ]
+      },
+      {
+        "duration": 7,
+        "title": "TerraPulse",
+        "subtitle": "Geospatial intelligence platform · NASA Space Apps 2026 · Team Banana Protocol",
+        "layers": [
+          "s2-after"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.25,
+          "bearing": 20,
+          "elevation": 50,
+          "drift": 3
+        }
+      }
+    ],
+    "credits": [
+      "Terrain: Copernicus DEM GLO-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the EU and ESA.",
+      "Imagery: contains modified Copernicus Sentinel data 2023-2024. Sentinel-1 RTC: Microsoft Planetary Computer (CC BY 4.0). Sentinel-2: Element 84 Earth Search / AWS Open Data.",
+      "Event facts: NHESS (2026) nhess-26-4131-2026; UNITAR-UNOSAT; Sentinel Asia. Lake identification and radar change: TerraPulse (derived)."
+    ]
+  }
 }

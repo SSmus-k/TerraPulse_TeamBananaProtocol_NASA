@@ -15,7 +15,7 @@ export type Provenance =
 
 export type DatasetKind =
   | "dem" | "sar" | "coherence" | "optical" | "mask" | "change" | "raster"
-  | "vector" | "table" | "placeholder-terrain" | "ml-summary";
+  | "vector" | "table" | "placeholder-terrain" | "ml-summary" | "flood-sim";
 
 export type DatasetFormat = "geotiff" | "geojson" | "csv" | "xlsx" | "table-json" | "procedural" | "grid" | "ml-summary-json";
 
@@ -128,6 +128,9 @@ export interface Dataset {
   derivedFrom?: string[];
   /** Arbitrary structured payload (e.g. an ML summary). */
   payload?: unknown;
+  display?: DisplayOptions;
+  /** Initial visibility requested by the workspace. */
+  initiallyVisible?: boolean;
   /** Inspection notes shown to the user (what was detected, what is uncertain). */
   notes: string[];
 }
@@ -142,6 +145,8 @@ export interface WorkspaceManifest {
   terrain?: string;
   /** Optional illustrative scenario phases (sandbox only). */
   scenario?: "illustrative-glof";
+  /** Optional scripted 3D story (see engines/visualization/story/types.ts). */
+  story?: import("../visualization/story/types").Story;
   datasets: WorkspaceDatasetSpec[];
 }
 
@@ -156,4 +161,21 @@ export interface WorkspaceDatasetSpec {
   date?: string;
   description?: string;
   howTo?: string;
+  /** Shown when the workspace opens (default: true for map layers). */
+  visible?: boolean;
+  display?: DisplayOptions;
+}
+
+/** Optional per-dataset styling. */
+export interface DisplayOptions {
+  /** Terrain products: how to draw a derived DEM raster (grey relief or slope classes). */
+  style?: "hillshade" | "slope";
+  /** Colour for masks (e.g. "#4fb3ff" for water). */
+  color?: string;
+  /** Change maps: |value| below this is transparent (default 1 dB). */
+  threshold?: number;
+  /** Change maps: value mapped to full colour (default from data, 3–10 dB). */
+  range?: number;
+  /** Flood models: JSON file (relative to the workspace) with the modelled flow path for the debris animation. */
+  pathUrl?: string;
 }

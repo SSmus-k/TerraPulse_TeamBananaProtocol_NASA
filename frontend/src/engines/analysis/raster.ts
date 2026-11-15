@@ -7,18 +7,30 @@ import type { Dataset, GridRaster, RasterStats } from "../data/types";
 
 const tiffCache = new Map<string, Promise<GeoTIFF>>();
 
+/**
+ * Cache key for a dataset's bytes. Dataset ids repeat across workspaces ("dem", "s2-before", …),
+ * so the key must include the actual source (URL, or uploaded file identity).
+ */
+export function sourceKey(ds: Dataset): string {
+  const f = ds.source?.file;
+  return `${ds.id}|${ds.source?.url ?? (f ? `${f.name}:${f.size}:${f.lastModified}` : "grid")}`;
+}
+
 export function openTiff(ds: Dataset): Promise<GeoTIFF> {
-  let p = tiffCache.get(ds.id);
+  const key = sourceKey(ds);
+  let p = tiffCache.get(key);
   if (!p) {
-    if (ds.source?.file) p = ds.source.file.arrayBuffer().then((b) => fromArrayBuffer(b));
-    else if (ds.source?.url) p = fromUrl(ds.source.url);
+    if (ds.source?.url) p = fromUrl(ds.source.url);
+    else if (ds.source?.file) p = ds.source.file.arrayBuffer().then((b) => fromArrayBuffer(b));
     else return Promise.reject(new Error(`Dataset ${ds.name} has no raster source`));
-    tiffCache.set(ds.id, p);
+    tiffCache.set(key, p);
   }
   return p;
 }
 
-export function forgetTiff(id: string) { tiffCache.delete(id); }
+export function forgetTiff(id: string) {
+  for (const k of [...tiffCache.keys()]) if (k.startsWith(`${id}|`)) tiffCache.delete(k);
+}
 
 export interface GridRead { values: Float32Array; cols: number; rows: number; bbox: [number, number, number, number] }
 

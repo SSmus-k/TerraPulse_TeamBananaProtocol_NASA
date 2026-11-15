@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { ACCEPTED_EXTENSIONS } from "../engines/data/inspect";
 import { useStore } from "../engines/data/store";
 import type { Dataset } from "../engines/data/types";
-import { ProvenanceBadge, ProvenanceKey } from "../engines/visualization/common/ProvenanceBadge";
+import { ProvenanceBadge } from "../engines/visualization/common/ProvenanceBadge";
 
 const KIND_LABEL: Record<Dataset["kind"], string> = {
   dem: "DEM", sar: "SAR", coherence: "Coherence", optical: "Optical", mask: "Mask", change: "Change", raster: "Raster",
-  vector: "Vector", table: "Table", "placeholder-terrain": "Terrain", "ml-summary": "Model",
+  vector: "Vector", table: "Table", "placeholder-terrain": "Terrain", "ml-summary": "Model", "flood-sim": "Flood model",
 };
 
 function StatusDot({ ds }: { ds: Dataset }) {
@@ -70,10 +70,6 @@ export function DatasetPanel() {
         </section>
       ))}
 
-      <section>
-        <h3 className="section-title">Provenance key</h3>
-        <ProvenanceKey />
-      </section>
     </nav>
   );
 }

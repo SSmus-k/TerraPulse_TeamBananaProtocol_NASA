@@ -40,7 +40,7 @@ function reducer(s: State, a: Action): State {
     case "index": return { ...s, index: a.index };
     case "workspace": {
       const visible: Record<string, boolean> = {};
-      a.datasets.forEach((d) => { visible[d.id] = d.kind !== "table" && d.kind !== "ml-summary"; });
+      a.datasets.forEach((d) => { visible[d.id] = d.initiallyVisible ?? (d.kind !== "table" && d.kind !== "ml-summary"); });
       return { ...s, workspace: a.workspace, datasets: a.datasets, visible, selectedId: null,
         terrainId: a.workspace.terrain ?? null, error: null };
     }

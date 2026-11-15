@@ -6,6 +6,8 @@ interface ViewControlsProps {
   shading: ShadingMode;
   onShading: (s: ShadingMode) => void;
   onReset: () => void;
+  hires?: boolean;
+  onHires?: (on: boolean) => void;
 }
 
 const MODES: { id: ShadingMode; label: string }[] = [
@@ -14,7 +16,7 @@ const MODES: { id: ShadingMode; label: string }[] = [
   { id: "slope", label: "Slope" },
 ];
 
-export function ViewControls({ exaggeration, onExaggeration, shading, onShading, onReset }: ViewControlsProps) {
+export function ViewControls({ exaggeration, onExaggeration, shading, onShading, onReset, hires, onHires }: ViewControlsProps) {
   return (
     <div className="view-controls">
       <div className="seg" role="radiogroup" aria-label="Terrain shading">
@@ -30,6 +32,11 @@ export function ViewControls({ exaggeration, onExaggeration, shading, onShading,
         <input type="range" min={0.5} max={4} step={0.1} value={exaggeration}
           onChange={(e) => onExaggeration(Number(e.target.value))} />
       </label>
+      {onHires && (
+        <label className="view-controls__toggle" title="Streams high-resolution satellite imagery (Esri World Imagery, date varies) under the analysis layers">
+          <input type="checkbox" checked={!!hires} onChange={(e) => onHires(e.target.checked)} /> High-res imagery
+        </label>
+      )}
       <button className="btn-ghost" onClick={onReset} title="Reset camera">
         <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

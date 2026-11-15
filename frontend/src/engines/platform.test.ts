@@ -128,3 +128,13 @@ describe("leakage detectors", () => {
     expect(singleColumnSeparators(sh, "y")).not.toContain("slope");
   });
 });
+
+describe("workspace isolation", () => {
+  it("datasets with the same id in different workspaces never share cached bytes", async () => {
+    const { sourceKey } = await import("./analysis/raster");
+    const base = { id: "dem", name: "dem", kind: "dem", format: "geotiff", provenance: "real-satellite", origin: "workspace", status: "ready", notes: [] } as Dataset;
+    const a = { ...base, source: { url: "/workspaces/thame-2024/dem_glo30.tif" } };
+    const b = { ...base, source: { url: "/workspaces/valencia-2024/dem.tif" } };
+    expect(sourceKey(a)).not.toBe(sourceKey(b));
+  });
+});

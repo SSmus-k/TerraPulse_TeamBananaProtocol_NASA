@@ -23,3 +23,5 @@ Thumbs.db
 .idea/
 
 .claude
+# generated outputs (recreate with: python -m terrapulse all)
+backend/reports/

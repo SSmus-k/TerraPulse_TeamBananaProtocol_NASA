@@ -17,7 +17,7 @@ interface UI {
 const UIContext = createContext<UI | null>(null);
 
 export function UIProvider({ children }: { children: ReactNode }) {
-  const [tab, setTab] = useState<Tab>("map");
+  const [tab, setTab] = useState<Tab>("terrain");
   const [mapFocus, setMapFocus] = useState<MapFocus | null>(null);
   const [tableId, setTableId] = useState<string | null>(null);
   const [modelTableId, setModelTableId] = useState<string | null>(null);

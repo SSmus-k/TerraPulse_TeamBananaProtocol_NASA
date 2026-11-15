@@ -9,12 +9,17 @@ import type { Dataset } from "../data/types";
 import type { LegendSpec } from "../data/terrainTypes";
 import { HYPSOMETRIC, SLOPE, rampToCss, sampleRamp, stops } from "../../lib/colormaps";
 
+/** Slope classes 0 → 60°: sage (gentle), sand, peach, red (steep), wine (cliffs). */
+const SLOPE_DEG = stops([[0, "#b9d3a8"], [0.25, "#e3cba3"], [0.5, "#f5a37a"], [0.75, "#d9534f"], [1, "#7a1f3d"]]);
+
 export const COHERENCE = stops([[0, "#14262b"], [0.5, "#2f8f86"], [1, "#d6f2ec"]]);
 export const SAR_GRAY = stops([[0, "#0c0d0e"], [1, "#f2f4f5"]]);
 /** Diverging pair validated for CVD separation on dark surfaces. */
 export const DIV_NEG = "#3f97cc";
 export const DIV_POS = "#d3735c";
 export const MASK_COLOR = "#d3735c";
+/** Sequential ramp for flood arrival time: early = warm/bright, late = dark. */
+export const FLOOD_TIME = stops([[0, "#fff6dc"], [0.35, "#e8cf9a"], [0.7, "#c9a467"], [1, "#9c7a45"]]);
 
 export interface Colorized { rgba: Uint8ClampedArray; legend: LegendSpec; values: Float32Array; unit?: string }
 
@@ -32,6 +37,28 @@ export function colorizeValues(ds: Dataset, g: GridRead): Colorized {
   if (ds.kind === "sar" && ds.raster?.sarScale === "linear") values = values.map(toDb);
   const st = computeStats(values);
   const lo = st.p2, hi = st.p98, span = hi - lo || 1;
+
+  // terrain products derived from a DEM
+  if (ds.display?.style === "hillshade") {
+    // grey relief that darkens shadowed slopes and lets the imagery underneath show on lit ones
+    for (let i = 0; i < n; i++) {
+      const v = values[i];
+      if (!Number.isFinite(v)) continue;
+      const t = Math.min(1, Math.max(0, v));
+      put(i, [0.06 + 0.9 * t, 0.06 + 0.88 * t, 0.07 + 0.84 * t], 0.25 + 0.6 * (1 - t));
+    }
+    return { rgba, values, legend: { type: "gradient", css: "linear-gradient(90deg, #121214, #f2efe6)", min: "shadow", max: "lit" } };
+  }
+  if (ds.display?.style === "slope") {
+    // fixed classes so maps are comparable: 0° gentle … 60°+ cliffs (avalanche/landslide terrain is ~30–45°)
+    for (let i = 0; i < n; i++) {
+      const v = values[i];
+      if (!Number.isFinite(v)) continue;
+      const t = Math.min(1, Math.max(0, v / 60));
+      put(i, sampleRamp(SLOPE_DEG, t), 0.35 + 0.5 * t);
+    }
+    return { rgba, values, unit: "°", legend: { type: "gradient", css: rampToCss(SLOPE_DEG), min: "0°", max: "60°+" } };
+  }
 
   switch (ds.kind) {
     case "dem": {
@@ -56,23 +83,32 @@ export function colorizeValues(ds: Dataset, g: GridRead): Colorized {
       return { rgba, values, legend: { type: "gradient", css: rampToCss(COHERENCE), min: "0", max: "1" } };
     }
     case "change": {
-      const range = Math.max(3, Math.min(10, Math.max(Math.abs(st.p2), Math.abs(st.p98))));
+      const range = ds.display?.range ?? Math.max(3, Math.min(10, Math.max(Math.abs(st.p2), Math.abs(st.p98))));
+      const thr = ds.display?.threshold ?? 1; // |Δ| below this (dB) is transparent
       const neg = hexRgb(DIV_NEG), pos = hexRgb(DIV_POS);
       for (let i = 0; i < n; i++) {
         const v = values[i];
-        if (!Number.isFinite(v)) continue;
+        if (!Number.isFinite(v) || Math.abs(v) < thr) continue;
         const t = Math.max(-1, Math.min(1, v / range));
-        const a = Math.abs(t) < 1 / range ? 0 : Math.min(1, 0.25 + Math.abs(t)); // |Δ| < 1 dB transparent
-        put(i, t < 0 ? neg : pos, a);
+        const ramp = Math.min(1, (Math.abs(v) - thr) / Math.max(0.5, range - thr));
+        put(i, t < 0 ? neg : pos, 0.6 + 0.4 * ramp);
       }
       return { rgba, values, unit: "dB", legend: { type: "gradient",
         css: `linear-gradient(to right, ${DIV_NEG}, rgba(120,120,120,0.15) 50%, ${DIV_POS})`,
         min: `−${range.toFixed(0)} dB (darker)`, max: `+${range.toFixed(0)} dB (brighter)` } };
     }
+    case "flood-sim": {
+      // static view: colour by arrival time (minutes after the outburst)
+      const maxT = st.max || 1;
+      for (let i = 0; i < n; i++) if (Number.isFinite(values[i])) put(i, sampleRamp(FLOOD_TIME, values[i] / maxT), 0.85);
+      return { rgba, values, unit: "s", legend: { type: "gradient", css: rampToCss(FLOOD_TIME), min: "0 min",
+        max: `${Math.round(maxT / 60)} min after outburst` } };
+    }
     case "mask": {
-      const c = hexRgb(MASK_COLOR);
-      for (let i = 0; i < n; i++) if (Number.isFinite(values[i]) && values[i] > 0) put(i, c, Math.min(1, values[i]) * 0.85);
-      return { rgba, values, legend: { type: "swatch", color: MASK_COLOR } };
+      const color = ds.display?.color ?? MASK_COLOR;
+      const c = hexRgb(color);
+      for (let i = 0; i < n; i++) if (Number.isFinite(values[i]) && values[i] > 0) put(i, c, Math.min(1, values[i]) * 0.9);
+      return { rgba, values, legend: { type: "swatch", color } };
     }
     default: {
       for (let i = 0; i < n; i++) if (Number.isFinite(values[i])) put(i, sampleRamp(SLOPE, (values[i] - lo) / span));

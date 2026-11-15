@@ -1,0 +1,229 @@
+{
+  "id": "valencia-2024",
+  "name": "Valencia floods 2024",
+  "subtitle": "Horta Sud & L'Albufera, Spain · 29 October 2024",
+  "description": "Second showcase: proves the platform is location-independent. Lowland flash flood (DANA) instead of a Himalayan GLOF. Built automatically by the TerraPulse region builder from open data (2026-11-14).",
+  "region": {
+    "name": "Valencia floods 2024",
+    "center": [
+      -0.42500000000000004,
+      39.4
+    ],
+    "zoom": 11
+  },
+  "terrain": "dem",
+  "datasets": [
+    {
+      "id": "dem",
+      "name": "Copernicus DEM GLO-30",
+      "kind": "dem",
+      "format": "geotiff",
+      "url": "dem.tif",
+      "provenance": "real-satellite",
+      "citation": "Copernicus DEM GLO-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA.",
+      "description": "30 m surface model (TanDEM-X 2011–2015): pre-event terrain."
+    },
+    {
+      "id": "s2-before",
+      "name": "Sentinel-2 true colour · 2024-09-26 (before)",
+      "kind": "optical",
+      "format": "geotiff",
+      "url": "s2_before.tif",
+      "provenance": "real-satellite",
+      "date": "2024-09-26",
+      "citation": "Contains modified Copernicus Sentinel data 2024, processed by ESA. Sentinel-2 L2A true colour via Element 84 Earth Search (AWS Open Data); resampled by TerraPulse.",
+      "visible": false
+    },
+    {
+      "id": "water-before",
+      "name": "Open water (NDWI) · 2024-09-26",
+      "kind": "mask",
+      "format": "geotiff",
+      "url": "water_before.tif",
+      "provenance": "derived",
+      "date": "2024-09-26",
+      "citation": "McFeeters NDWI > 0.2 from Sentinel-2 green/NIR. Shadows and snow can be misclassified.",
+      "display": {
+        "color": "#3fa9f5"
+      },
+      "visible": false
+    },
+    {
+      "id": "s2-after",
+      "name": "Sentinel-2 true colour · 2024-12-15 (after)",
+      "kind": "optical",
+      "format": "geotiff",
+      "url": "s2_after.tif",
+      "provenance": "real-satellite",
+      "date": "2024-12-15",
+      "citation": "Contains modified Copernicus Sentinel data 2024, processed by ESA. Sentinel-2 L2A true colour via Element 84 Earth Search (AWS Open Data); resampled by TerraPulse.",
+      "visible": false
+    },
+    {
+      "id": "water-after",
+      "name": "Open water (NDWI) · 2024-12-15",
+      "kind": "mask",
+      "format": "geotiff",
+      "url": "water_after.tif",
+      "provenance": "derived",
+      "date": "2024-12-15",
+      "citation": "McFeeters NDWI > 0.2 from Sentinel-2 green/NIR. Shadows and snow can be misclassified.",
+      "display": {
+        "color": "#3fa9f5"
+      },
+      "visible": false
+    },
+    {
+      "id": "s1-change",
+      "name": "Radar change Δσ° · 2024-10-20 → 2024-11-01",
+      "kind": "change",
+      "format": "geotiff",
+      "url": "s1_change.tif",
+      "provenance": "derived",
+      "date": "2024-11-01",
+      "citation": "Contains modified Copernicus Sentinel data. Sentinel-1 RTC from Microsoft Planetary Computer (CC BY 4.0); VV, multilooked and resampled by TerraPulse.",
+      "display": {
+        "threshold": 3,
+        "range": 8
+      },
+      "visible": false,
+      "description": "Δσ° = σ°(2024-11-01) − σ°(2024-10-20), VV, orbit 110-descending, 3×3 mean. Orange = brighter after (debris, rubble, roughening), blue = darker after (often new standing water). 4.2% of pixels > +3 dB, 5.1% < −3 dB. Caveat: rice fields around L'Albufera are deliberately flooded in autumn/winter, so not all new water in the south is flood water. The radar orbit covers ~68% of the area (southern strip missing)."
+    },
+    {
+      "id": "s1-before",
+      "name": "Sentinel-1 RTC VV · 2024-10-20",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": "s1_vv_before.tif",
+      "provenance": "real-satellite",
+      "date": "2024-10-20",
+      "citation": "Contains modified Copernicus Sentinel data. Sentinel-1 RTC from Microsoft Planetary Computer (CC BY 4.0); VV, multilooked and resampled by TerraPulse.",
+      "visible": false
+    },
+    {
+      "id": "s1-after",
+      "name": "Sentinel-1 RTC VV · 2024-11-01",
+      "kind": "sar",
+      "format": "geotiff",
+      "url": "s1_vv_after.tif",
+      "provenance": "real-satellite",
+      "date": "2024-11-01",
+      "citation": "Contains modified Copernicus Sentinel data. Sentinel-1 RTC from Microsoft Planetary Computer (CC BY 4.0); VV, multilooked and resampled by TerraPulse.",
+      "visible": false
+    }
+  ],
+  "story": {
+    "title": "Valencia floods 2024",
+    "exaggeration": 3,
+    "scenes": [
+      {
+        "duration": 5,
+        "title": "Valencia floods 2024",
+        "subtitle": "Horta Sud & L'Albufera, Spain · 29 October 2024",
+        "layers": [],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.2,
+          "bearing": 200,
+          "elevation": 45,
+          "drift": 2
+        }
+      },
+      {
+        "duration": 8,
+        "caption": "Before: Sentinel-2 satellite image, 2024-09-26, on real 30 m terrain.",
+        "source": "Copernicus Sentinel-2 · Copernicus DEM GLO-30",
+        "provenance": "real-satellite",
+        "layers": [
+          "s2-before"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 0.9,
+          "bearing": 180,
+          "elevation": 52,
+          "drift": 3
+        }
+      },
+      {
+        "duration": 12,
+        "caption": "Sentinel-1 radar, 20 Oct → 1 Nov 2024. Blue = darker: standing water, e.g. the Turia flood channel and fields in the south (part may be seasonal rice-field flooding around L'Albufera). Orange = brighter: wet ground and debris.",
+        "source": "Copernicus Sentinel-1 RTC Δσ° (VV)",
+        "provenance": "derived",
+        "layers": [
+          "s2-before",
+          "s1-change"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 0.75,
+          "bearing": 130,
+          "elevation": 58,
+          "drift": 3
+        }
+      },
+      {
+        "duration": 8,
+        "caption": "After: Sentinel-2 image, 2024-12-15.",
+        "source": "Copernicus Sentinel-2",
+        "provenance": "real-satellite",
+        "layers": [
+          "s2-after"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 0.9,
+          "bearing": 70,
+          "elevation": 52,
+          "drift": 3
+        }
+      },
+      {
+        "duration": 6,
+        "title": "TerraPulse",
+        "subtitle": "Geospatial intelligence platform · NASA Space Apps 2026",
+        "layers": [
+          "s2-after"
+        ],
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.25,
+          "bearing": 20,
+          "elevation": 50,
+          "drift": 3
+        }
+      }
+    ],
+    "attribution": "Copernicus DEM GLO-30 © DLR/Airbus; contains modified Copernicus Sentinel data (Sentinel-1 RTC via Microsoft Planetary Computer, CC BY 4.0; Sentinel-2 via Earth Search/AWS).",
+    "credits": [
+      "Copernicus DEM GLO-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA.",
+      "Contains modified Copernicus Sentinel data. Sentinel-1 RTC: Microsoft Planetary Computer (CC BY 4.0). Sentinel-2: Element 84 Earth Search / AWS Open Data.",
+      "Radar change and water masks: TerraPulse (derived)."
+    ]
+  }
+}

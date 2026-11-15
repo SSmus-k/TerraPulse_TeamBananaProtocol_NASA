@@ -36,7 +36,7 @@
       "format": "csv",
       "url": "terrapulse_synthetic_v1.csv",
       "provenance": "synthetic",
-      "description": "3,519 fabricated samples in 8 synthetic event groups (see docs/SYNTHETIC_DATA.md)."
+      "description": "3,519 fabricated samples in 8 synthetic event groups."
     },
     {
       "id": "syn-dem",
@@ -64,5 +64,101 @@
       "date": "2000-02-01",
       "description": "SYNTHETIC SAR 'after' scene with planted changes (+6 dB fan, −8 dB patch) to test change detection."
     }
-  ]
+  ],
+  "story": {
+    "title": "Interface sandbox (illustrative)",
+    "exaggeration": 1.3,
+    "scenes": [
+      {
+        "duration": 5,
+        "title": "Interface sandbox",
+        "subtitle": "Placeholder terrain and an illustrative scenario - not a real place",
+        "phase": "before",
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.2,
+          "bearing": 200,
+          "elevation": 42,
+          "drift": 2
+        }
+      },
+      {
+        "duration": 8,
+        "caption": "Before: the glacial lake sits full behind its moraine dam.",
+        "provenance": "illustrative",
+        "phase": "before",
+        "camera": {
+          "target": {
+            "uv": [
+              0.74,
+              0.16
+            ]
+          },
+          "distance": 0.35,
+          "bearing": 200,
+          "elevation": 35,
+          "drift": 4
+        }
+      },
+      {
+        "duration": 9,
+        "caption": "Event: the lake drains and a flood surges down the valley.",
+        "provenance": "illustrative",
+        "phase": "event",
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 0.6,
+          "bearing": 150,
+          "elevation": 38,
+          "drift": 5
+        }
+      },
+      {
+        "duration": 9,
+        "caption": "After: slope failures scar the valley walls and the lake is partly drained.",
+        "provenance": "illustrative",
+        "phase": "after",
+        "camera": {
+          "target": {
+            "uv": [
+              0.45,
+              0.6
+            ]
+          },
+          "distance": 0.45,
+          "bearing": 250,
+          "elevation": 32,
+          "drift": 4
+        }
+      },
+      {
+        "duration": 5,
+        "title": "TerraPulse",
+        "subtitle": "Illustrative demo - placeholder data only",
+        "phase": "after",
+        "camera": {
+          "target": {
+            "uv": [
+              0.5,
+              0.5
+            ]
+          },
+          "distance": 1.25,
+          "bearing": 20,
+          "elevation": 50,
+          "drift": 3
+        }
+      }
+    ]
+  }
 }

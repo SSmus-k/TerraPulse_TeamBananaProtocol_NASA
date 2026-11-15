@@ -1,7 +1,24 @@
 {
   "workspaces": [
-    { "id": "thame-2024", "name": "Thame GLOF 2024", "subtitle": "Solukhumbu, Nepal" },
-    { "id": "sandbox", "name": "Interface sandbox (placeholder + synthetic)" },
-    { "id": "blank", "name": "Blank workspace (bring your own data)" }
+    {
+      "id": "thame-2024",
+      "name": "Thame GLOF 2024",
+      "subtitle": "Solukhumbu, Nepal · 16 August 2024"
+    },
+    {
+      "id": "valencia-2024",
+      "name": "Valencia floods 2024",
+      "subtitle": "Horta Sud & L'Albufera, Spain · 29 October 2024"
+    },
+    {
+      "id": "sandbox",
+      "name": "Interface sandbox",
+      "subtitle": "Placeholder terrain · synthetic data"
+    },
+    {
+      "id": "blank",
+      "name": "Blank workspace",
+      "subtitle": "Drop in your own GeoTIFF, GeoJSON or CSV"
+    }
   ]
 }
