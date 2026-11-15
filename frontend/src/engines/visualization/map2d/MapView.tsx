@@ -5,6 +5,10 @@
 import * as maplibregl from "maplibre-gl";
 import type { StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+// MapLibre loads its worker from a file next to its own script, which a production bundle doesn't keep.
+// Let Vite bundle the worker (with its shared chunk) and tell MapLibre where it is.
+import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
 import { useEffect, useRef, useState } from "react";
 import type { Dataset } from "../../data/types";
 import type { LegendSpec } from "../../data/terrainTypes";

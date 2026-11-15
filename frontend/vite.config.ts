@@ -8,5 +8,6 @@ export default defineConfig({
     proxy: { "/api": { target: "http://127.0.0.1:8000", changeOrigin: true } },
   },
   build: { chunkSizeWarningLimit: 2500 },
+  worker: { format: "es" }, // MapLibre starts its worker as an ES module
   test: { environment: "node", include: ["src/**/*.test.ts"] },
 } as never);

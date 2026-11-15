@@ -2,13 +2,24 @@
  * Workspace store: the active workspace, its datasets (manifest + uploads +
  * derived products), selection and layer visibility.
  */
-import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
 import { apiHealth } from "../analysis/apiClient";
 import { forgetTiff } from "../analysis/raster";
 import { datasetFromFile, datasetFromSpec, inspectDataset } from "./inspect";
 import type { Dataset, WorkspaceManifest } from "./types";
 
 export interface WorkspaceEntry { id: string; name: string; subtitle?: string }
+
+/** Lon/lat footprint of a dataset, when it has one. */
+export function lonLatBox(d: Dataset): [number, number, number, number] | null {
+  const c = d.raster?.lonLatCorners;
+  if (c) {
+    const xs = c.map((p) => p[0]), ys = c.map((p) => p[1]);
+    return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+  }
+  return d.vector?.bbox ?? null;
+}
+const overlaps = (a: number[], b: number[]) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 
 interface State {
   index: WorkspaceEntry[];
@@ -111,6 +122,29 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       .catch((e) => dispatch({ type: "error", error: `Could not load workspace index: ${e.message}` }));
     apiHealth().then((online) => dispatch({ type: "api", online }));
   }, [loadWorkspace]);
+
+  // An uploaded DEM that covers a different place than the current terrain takes over the 3D terrain,
+  // and layers from elsewhere are hidden, so the map, 3D view and drapes all show the new place.
+  const adopted = useRef(new Set<string>());
+  useEffect(() => {
+    const terrain = s.datasets.find((d) => d.id === s.terrainId) ?? null;
+    for (const d of s.datasets) {
+      if (d.origin !== "upload" || d.kind !== "dem" || d.status !== "ready" || adopted.current.has(d.id)) continue;
+      adopted.current.add(d.id);
+      const box = lonLatBox(d);
+      if (!box) continue;
+      const tbox = terrain && terrain.kind !== "placeholder-terrain" ? lonLatBox(terrain) : null;
+      if (tbox && overlaps(box, tbox)) continue; // same place: keep the current terrain
+      dispatch({ type: "terrain", id: d.id });
+      for (const o of s.datasets) {
+        const ob = lonLatBox(o);
+        if (o.id !== d.id && s.visible[o.id] && (o.kind === "placeholder-terrain" || (ob && !overlaps(ob, box)))) {
+          dispatch({ type: "visible", id: o.id, on: false });
+        }
+      }
+      break;
+    }
+  }, [s.datasets, s.terrainId, s.visible]);
 
   const value = useMemo<Ctx>(() => ({
     ...s,

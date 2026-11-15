@@ -49,13 +49,14 @@ function Patch({ grid, exaggeration, box, opacity, base, terrainGeometry }:
       if (p) pos.setXYZ(i, p[0], p[1] + geo.mz(3), p[2]);
     }
     pos.needsUpdate = true;
+    g.computeVertexNormals(); // so the patch is lit like the terrain under it
     g.computeBoundingSphere();
     return g;
   }, [geo, box, base]);
   useEffect(() => () => own?.dispose(), [own]);
   // the whole-terrain base image reuses the terrain mesh itself (exact fit, UVs already north-up)
   const geometry = base ? terrainGeometry ?? null : own;
-  const mat = useRef<THREE.MeshBasicMaterial>(null);
+  const mat = useRef<THREE.MeshLambertMaterial>(null);
   const mesh = useRef<THREE.Mesh>(null);
   useFrame((_, dt) => {
     if (!mat.current || !mesh.current) return;
@@ -66,7 +67,9 @@ function Patch({ grid, exaggeration, box, opacity, base, terrainGeometry }:
   if (!geometry) return null;
   return (
     <mesh ref={mesh} geometry={geometry} renderOrder={base ? 9 : 9.5} raycast={() => null}>
-      <meshBasicMaterial ref={mat} map={tex ?? undefined} transparent opacity={0} depthWrite={false} toneMapped={false}
+      {/* lit, so relief reads through the photo; the colour factor keeps flat ground at the photo's own brightness
+          (ambient 0.55 + sky 0.25 + sun ~0.65 on level ground ≈ 1.45) */}
+      <meshLambertMaterial ref={mat} map={tex ?? undefined} color={[0.69, 0.69, 0.69]} transparent opacity={0} depthWrite={false} toneMapped={false}
         polygonOffset polygonOffsetFactor={-1} polygonOffsetUnits={-1} side={THREE.DoubleSide} />
     </mesh>
   );

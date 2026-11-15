@@ -58,7 +58,7 @@ export function locateData(workspace: WorkspaceManifest | null, datasets: Datase
   const uploads = datasets.filter((d) => d.origin === "upload" && d.status === "ready");
   for (let i = uploads.length - 1; i >= 0; i--) {
     const p = datasetCenter(uploads[i]);
-    if (ok(p)) return { lon: p[0], lat: p[1], label: uploads[i].name, key: `up:${uploads[i].id}` };
+    if (ok(p)) return { lon: p[0], lat: p[1], label: "Your data", key: `up:${uploads[i].id}` };
   }
   if (!workspace) return null;
   const rc = workspace.region?.center;

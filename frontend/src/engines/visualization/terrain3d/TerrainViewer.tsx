@@ -4,6 +4,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRe
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { aspectAt } from "../../analysis/terrain";
+import { autoExaggeration } from "./exaggeration";
 import type { ShadingMode, TerrainGrid, TerrainOverlay } from "../../data/terrainTypes";
 import { ProvenanceBadge } from "../common/ProvenanceBadge";
 import { HoverCard, type HoverInfo } from "./HoverCard";
@@ -89,7 +90,11 @@ function sampleOverlay(o: TerrainOverlay, u: number, v: number): number | null {
 
 export function TerrainViewer({ grid, slope, hillshade, overlays, terrainVisible = true, notice, loadingText, footer,
   story, onStoryScene, videoName = "terrapulse-story", attribution, vectors = [], flowPath, imagery, hires, onHires }: TerrainViewerProps) {
-  const [exaggeration, setExaggeration] = useState(1.2);
+  // exaggeration follows each terrain's relief (floodplains get lifted, mountains stay near true scale)
+  const autoEx = useMemo(() => (grid ? autoExaggeration(grid.minElevation, grid.maxElevation, grid.sizeMeters) : 1.2),
+    [grid?.minElevation, grid?.maxElevation, grid?.sizeMeters[0], grid?.sizeMeters[1]]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [exaggeration, setExaggeration] = useState(autoEx);
+  useEffect(() => { setExaggeration(autoEx); }, [autoEx]);
   const [shading, setShading] = useState<ShadingMode>("hypsometric");
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
   const [hover, setHover] = useState<HoverInfo | null>(null);
@@ -213,7 +218,7 @@ export function TerrainViewer({ grid, slope, hillshade, overlays, terrainVisible
         {!busy && notice && <div className="viewer__error" role="status">{notice}</div>}
         <div className="viewer__north" aria-label="North arrow"><div ref={northRef} className="viewer__north-needle"><span>N</span></div></div>
         {!busy && grid && (
-          <ViewControls exaggeration={exaggeration} onExaggeration={setExaggeration}
+          <ViewControls exaggeration={exaggeration} onExaggeration={setExaggeration} autoExaggeration={autoEx}
             shading={shading} onShading={setShading} onReset={() => rig.current?.reset()}
             hires={hires} onHires={onHires} />
         )}

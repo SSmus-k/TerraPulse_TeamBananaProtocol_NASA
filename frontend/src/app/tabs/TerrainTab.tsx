@@ -3,8 +3,9 @@ import { demToTerrainGrid } from "../../engines/analysis/demProducts";
 import { SCENARIO_LAYERS, scenarioOverlays } from "../../engines/analysis/illustrativeScenario";
 import { computeHillshade, computeSlope } from "../../engines/analysis/terrain";
 import { intersectBbox, sameCrs } from "../../engines/data/crs";
-import { useStore } from "../../engines/data/store";
+import { lonLatBox, useStore } from "../../engines/data/store";
 import type { Phase, TerrainGrid, TerrainOverlay } from "../../engines/data/terrainTypes";
+import type { Dataset } from "../../engines/data/types";
 import { renderOnGrid } from "../../engines/visualization/rasterColor";
 import { Timeline } from "../../engines/visualization/terrain3d/Timeline";
 import { TerrainViewer } from "../../engines/visualization/terrain3d/TerrainViewer";
@@ -23,6 +24,7 @@ export function TerrainTab() {
   const [scenarioOn, setScenarioOn] = useState<Record<string, boolean>>({});
   const [draped, setDraped] = useState<TerrainOverlay[]>([]);
   const [drapeNotes, setDrapeNotes] = useState<string[]>([]);
+  const [outside, setOutside] = useState<{ id: string; name: string }[]>([]); // rasters that miss this terrain
 
   // terrain source → grid
   useEffect(() => {
@@ -47,16 +49,20 @@ export function TerrainTab() {
     .sort((a, b) => (DRAPE_ORDER[a.kind] ?? 1) - (DRAPE_ORDER[b.kind] ?? 1)), [datasets, terrainId]);
   void storyLayerIds;
   useEffect(() => {
-    if (!grid?.bbox || !terrainDs?.raster) { setDraped([]); setDrapeNotes([]); return; }
+    if (!grid?.bbox || !terrainDs?.raster) { setDraped([]); setDrapeNotes([]); setOutside([]); return; }
     let cancelled = false;
     const notes: string[] = [];
+    const miss: { id: string; name: string }[] = [];
     const s = Math.min(1, DRAPE_MAX / Math.max(grid.cols, grid.rows) * 2);
     const cols = Math.round(grid.cols * s), rows = Math.round(grid.rows * s);
     Promise.all(drapeCandidates.map(async (d) => {
       const crs = d.raster?.crs ?? d.grid?.crs;
       const bbox = d.raster?.bbox ?? d.grid?.bbox;
       if (!crs || !bbox || !sameCrs(crs, terrainDs.raster!.crs)) { notes.push(`${d.name}: different CRS from the DEM - not draped (reprojection is on the roadmap).`); return null; }
-      if (!intersectBbox(bbox, grid.bbox!)) { notes.push(`${d.name}: does not overlap the DEM.`); return null; }
+      if (!intersectBbox(bbox, grid.bbox!)) {
+        miss.push({ id: d.id, name: d.name }); // layers from another place are simply not drawn
+        return null;
+      }
       // imagery keeps its own (finer) resolution, up to 1600 px; analysis layers use the terrain grid size
       const fine = d.kind === "optical" && d.raster ? Math.min(1, 1600 / Math.max(d.raster.width, d.raster.height)) : 0;
       const r = fine ? await renderOnGrid(d, grid.bbox!, Math.round(d.raster!.width * fine), Math.round(d.raster!.height * fine))
@@ -64,10 +70,14 @@ export function TerrainTab() {
       return { id: d.id, name: d.name, rgba: r.rgba, cols: r.cols, rows: r.rows, opacity: d.kind === "optical" ? 1 : 0.9,
         shaded: d.kind !== "optical", provenance: d.provenance, timeField: d.kind === "flood-sim" ? r.values : undefined,
         values: r.values, unit: r.unit, legend: r.legend } as TerrainOverlay;
-    })).then((list) => { if (!cancelled) { setDraped(list.filter(Boolean) as TerrainOverlay[]); setDrapeNotes(notes); } })
+    })).then((list) => { if (!cancelled) { setDraped(list.filter(Boolean) as TerrainOverlay[]); setDrapeNotes(notes); setOutside(miss); } })
       .catch((e) => !cancelled && setDrapeNotes([String(e.message ?? e)]));
     return () => { cancelled = true; };
   }, [grid, terrainDs, drapeCandidates]);
+
+  // warn only about layers the user has switched on but that lie elsewhere
+  const notices = [...drapeNotes, ...outside.filter((o) => visible[o.id]).map((o) =>
+    `${o.name}: lies outside the current 3D terrain (${terrainDs?.name}). Add a DEM that covers it, or choose its DEM as the 3D terrain.`)];
 
   const isScenario = terrainDs?.kind === "placeholder-terrain" && workspace?.scenario === "illustrative-glof";
   const overlays = useMemo(() => {
@@ -77,8 +87,10 @@ export function TerrainTab() {
   }, [isScenario, grid, derived, phase, scenarioOn, draped, sceneLayers, visible]);
 
   // Story: the workspace's own script, or a generic flyover for any terrain
-  const story = useMemo(() => (grid ? workspace?.story ?? defaultStory(workspace?.name ?? "TerraPulse", grid.provenance.label) : undefined),
-    [grid, workspace]);
+  const ownTerrain = terrainDs?.origin === "workspace";
+  const story = useMemo(() => (grid
+    ? (ownTerrain ? workspace?.story : undefined) ?? defaultStory(ownTerrain ? workspace?.name ?? "TerraPulse" : terrainDs?.name ?? "Your data", grid.provenance.label)
+    : undefined), [grid, workspace, ownTerrain, terrainDs?.name]);
   const onStoryScene = useCallback((scene: StoryScene | null) => {
     if (scene?.phase) setPhase(scene.phase);
     setSceneLayers(scene ? scene.layers ?? null : null);
@@ -86,11 +98,18 @@ export function TerrainTab() {
   const attribution = terrainDs?.citation ?? (terrainDs?.kind === "placeholder-terrain" ? "Placeholder terrain: procedurally generated, not real topography." : undefined);
 
   // vector layers (buildings, paths, rivers) and the modelled flow path for the debris animation
-  const vectors = useMemo(() => datasets.filter((d) => d.status === "ready" && d.vector)
+  // only things on this terrain: a workspace's buildings or flood path must not appear on someone else's DEM
+  const terrainBox = terrainDs ? lonLatBox(terrainDs) : null;
+  const onTerrain = (d: Dataset) => {
+    const b = lonLatBox(d);
+    return !terrainBox || !b || (b[0] < terrainBox[2] && terrainBox[0] < b[2] && b[1] < terrainBox[3] && terrainBox[1] < b[3]);
+  };
+  const vectors = useMemo(() => datasets.filter((d) => d.status === "ready" && d.vector && onTerrain(d))
     .map((d) => ({ id: d.id, fc: d.vector!.geojson, opacity: (sceneLayers ? sceneLayers.includes(d.id) : visible[d.id]) ? 1 : 0 })),
-  [datasets, sceneLayers, visible]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [datasets, sceneLayers, visible, terrainBox?.join()]);
   const [flowPath, setFlowPath] = useState<[number, number, number][] | undefined>();
-  const simDs = datasets.find((d) => d.kind === "flood-sim" && d.status === "ready" && d.display?.pathUrl);
+  const simDs = datasets.find((d) => d.kind === "flood-sim" && d.status === "ready" && d.display?.pathUrl && onTerrain(d));
   useEffect(() => {
     if (!simDs?.display?.pathUrl || !simDs.source?.url) { setFlowPath(undefined); return; }
     const url = simDs.source.url.replace(/[^/]*$/, simDs.display.pathUrl);
@@ -101,8 +120,13 @@ export function TerrainTab() {
   const [hires, setHires] = useState(true);
   const focus = useMemo(() => {
     const pts: [number, number][] = [];
-    for (const sc of workspace?.story?.scenes ?? []) for (const m of sc.markers ?? []) if (m.target.lonlat) pts.push(m.target.lonlat);
-    if (workspace?.region?.center) pts.push(workspace.region.center);
+    if (terrainDs?.origin === "workspace") {
+      for (const sc of workspace?.story?.scenes ?? []) for (const m of sc.markers ?? []) if (m.target.lonlat) pts.push(m.target.lonlat);
+      if (workspace?.region?.center) pts.push(workspace.region.center);
+    } else if (grid?.bbox && terrainDs?.raster?.lonLatCorners) {
+      const c = terrainDs.raster.lonLatCorners;
+      pts.push([(c[0][0] + c[2][0]) / 2, (c[0][1] + c[2][1]) / 2]);
+    }
     const uniq: [number, number][] = [];
     for (const p of pts) if (!uniq.some((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) < 0.012)) uniq.push(p);
     return uniq;
@@ -116,7 +140,7 @@ export function TerrainTab() {
   return (
     <TerrainViewer
       grid={grid} slope={derived?.slope ?? null} hillshade={derived?.hillshade ?? null} overlays={overlays}
-      notice={err ?? (drapeNotes.length ? drapeNotes.join(" ") : undefined)} loadingText={noTerrainText}
+      notice={err ?? (notices.length ? notices.join(" ") : undefined)} loadingText={noTerrainText}
       story={story} onStoryScene={onStoryScene} attribution={story?.attribution ?? attribution}
       videoName={`terrapulse-${workspace?.id ?? "story"}`} vectors={vectors} flowPath={flowPath}
       imagery={grid?.crs?.geographic ? imagery : undefined} hires={hires} onHires={setHires}

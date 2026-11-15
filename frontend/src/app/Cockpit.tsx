@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { ACCEPTED_EXTENSIONS } from "../engines/data/inspect";
 import { useStore } from "../engines/data/store";
-import { ProvenanceKey } from "../engines/visualization/common/ProvenanceBadge";
-import { DatasetPanel } from "./DatasetPanel";
+import { PROVENANCE_META, PROVENANCE_ORDER } from "../engines/data/provenance";
+import type { Dataset } from "../engines/data/types";
+import { ProvenanceBadge } from "../engines/visualization/common/ProvenanceBadge";
 import { useUI, type Tab } from "./ui";
 
 /* ---------------------------------------------------------------- pillars */
@@ -132,88 +133,140 @@ export function pillarCaption(i: number | null): string | null {
 
 /* ---------------------------------------------------------------- floor index panel */
 
-const KICKER: Record<string, string> = {
-  "thame-2024": "Glacial lake outburst · Nepal",
-  "valencia-2024": "Flash flood · Spain",
-  sandbox: "Placeholder & synthetic",
+const KIND: Record<string, string> = {
+  "thame-2024": "Glacial lake outburst",
+  "valencia-2024": "Flash flood",
+  sandbox: "Synthetic sandbox",
   blank: "Your own data",
 };
+const TYPE_LABEL: Record<Dataset["kind"], string> = {
+  dem: "DEM", sar: "SAR", coherence: "Coherence", optical: "Optical", mask: "Mask", change: "Change", raster: "Raster",
+  vector: "Vector", table: "Table", "placeholder-terrain": "Terrain", "ml-summary": "Model", "flood-sim": "Flood model",
+};
+const ORIGIN_ORDER: Dataset["origin"][] = ["workspace", "upload", "derived"];
+const ORIGIN_LABEL: Record<Dataset["origin"], string> = { workspace: "Workspace", upload: "Your uploads", derived: "Derived" };
 
 type Pane = "places" | "layers" | "key";
 
-/* The floor cutout (818 × 444 px, from y = 796 in the artwork) and the recess cut into it, in the same pixels. */
-const FLOOR_BOX = { x: 0, y: 795, w: 819, h: 445 };
-const INLAY = "24,70 150,63 300,84 450,113 540,136 598,170 640,236 684,312 726,388 752,444 24,444";
-const INLAY_CLIP = `polygon(${INLAY.split(" ").map((p) => {
-  const [x, y] = p.split(",").map(Number);
-  return `${(x / FLOOR_BOX.w) * 100}% ${(y / FLOOR_BOX.h) * 100}%`;
-}).join(", ")})`;
+/** "Solukhumbu, Nepal · 16 August 2024" → ["Solukhumbu, Nepal", "16 August 2024"] */
+function splitSubtitle(s?: string): [string, string] {
+  if (!s) return ["", ""];
+  const i = s.lastIndexOf(" · ");
+  if (i < 0 || !/\d/.test(s.slice(i + 3))) return [s, ""]; // the tail is a date only if it has digits
+  return [s.slice(0, i), s.slice(i + 3)];
+}
+
+function PlacesTable({ onChoose }: { onChoose?: (id: string) => void }) {
+  const { index, workspace, loadWorkspace } = useStore();
+  return (
+    <table className="itable itable--places">
+      <thead><tr><th className="c-num">#</th><th>Event</th><th>Region</th><th className="c-date">Date</th></tr></thead>
+      <tbody>
+        {index.map((w, i) => {
+          const [region, date] = splitSubtitle(w.subtitle);
+          const active = workspace?.id === w.id;
+          const go = () => { if (!active) loadWorkspace(w.id); onChoose?.(w.id); };
+          return (
+            <tr key={w.id} className={active ? "is-active" : ""} tabIndex={0} aria-selected={active}
+              onClick={go} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }}>
+              <td className="c-num">{String(i + 1).padStart(2, "0")}</td>
+              <td><span className="t-main">{w.name}</span><span className="t-sub">{KIND[w.id] ?? "Region"}</span></td>
+              <td className="t-dim">{region}</td>
+              <td className="c-date t-dim">{date}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+
+function LayersTable() {
+  const { datasets, visible, toggle, select, selectedId, addFiles, terrainId } = useStore();
+  const input = useRef<HTMLInputElement>(null);
+  // when your own DEM is the terrain, your uploads come first
+  const uploadsFirst = datasets.find((d) => d.id === terrainId)?.origin === "upload";
+  const order: Dataset["origin"][] = uploadsFirst ? ["upload", "derived", "workspace"] : ORIGIN_ORDER;
+  const groups = order.map((o) => ({ o, items: datasets.filter((d) => d.origin === o) })).filter((g) => g.items.length);
+  return (
+    <>
+      <div className="itable__tools">
+        <button className="btn-line btn-line--sm" onClick={() => input.current?.click()}>Add data</button>
+        <span className="t-dim">GeoTIFF, GeoJSON, CSV or Excel. Drop files anywhere on this panel.</span>
+        <input ref={input} type="file" multiple hidden accept={ACCEPTED_EXTENSIONS.join(",")}
+          onChange={(e) => { if (e.target.files?.length) addFiles(e.target.files); e.target.value = ""; }} />
+      </div>
+      <table className="itable itable--layers">
+        <thead><tr><th className="c-chk" aria-label="Shown" /><th>Layer</th><th>Type</th><th>Source</th><th className="c-date">Date</th></tr></thead>
+        {groups.map((g) => (
+          <tbody key={g.o}>
+            {groups.length > 1 && <tr className="itable__group"><td colSpan={5}>{ORIGIN_LABEL[g.o]}</td></tr>}
+            {g.items.map((d) => {
+              const showable = d.status === "ready" && d.kind !== "table" && d.kind !== "ml-summary";
+              return (
+                <tr key={d.id} className={`${selectedId === d.id ? "is-active" : ""} ${d.status === "missing" ? "is-missing" : ""}`}
+                  tabIndex={0} onClick={() => select(d.id)}
+                  onKeyDown={(e) => { if (e.key === "Enter") select(d.id); }}>
+                  <td className="c-chk" onClick={(e) => e.stopPropagation()}>
+                    {showable
+                      ? <input type="checkbox" checked={!!visible[d.id]} onChange={() => toggle(d.id)} aria-label={`Show ${d.name}`} />
+                      : <span className={`dot dot--${d.status}`} title={d.status} />}
+                  </td>
+                  <td><span className="t-main t-clip" title={d.name}>{d.name}</span></td>
+                  <td className="t-dim">{TYPE_LABEL[d.kind]}</td>
+                  <td><ProvenanceBadge kind={d.provenance} /></td>
+                  <td className="c-date t-dim">{d.date ?? ""}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        ))}
+      </table>
+    </>
+  );
+}
+
+function KeyTable() {
+  return (
+    <table className="itable itable--key">
+      <thead><tr><th>Badge</th><th>Meaning</th></tr></thead>
+      <tbody>
+        {PROVENANCE_ORDER.map((k) => (
+          <tr key={k}><td><ProvenanceBadge kind={k} /></td><td className="t-dim">{PROVENANCE_META[k].desc}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 /**
- * The floor under the pillars is the index: the painted slab is cut out and lifted onto its own layer,
- * the tabs are engraved into its surface, and the list sits in a recessed inlay cut into the slab.
+ * The index console: a clean rectangular panel set over the floor (hiding its irregular outline), with
+ * proper tables for places, layers and the provenance key.
  */
 export function IndexPanel({ onChoose, caption }: { onChoose?: (id: string) => void; caption?: string | null }) {
-  const { index, workspace, loadWorkspace, datasets } = useStore();
+  const { workspace, datasets, addFiles, terrainId } = useStore();
   const [pane, setPane] = useState<Pane>("places");
+  const terrain = datasets.find((d) => d.id === terrainId);
+  const [drag, setDrag] = useState(false);
   const ready = datasets.filter((d) => d.status === "ready").length;
-  const readout = caption ?? (workspace ? `Loaded · ${workspace.name}` : "Choose a place, or bring your own data");
+  const readout = caption ?? (terrain?.origin === "upload" ? `Your data · terrain ${terrain.name}`
+    : workspace ? `Loaded · ${workspace.name}` : "Choose a place, or bring your own data");
   return (
-    <section className="floor" aria-label="Index"
-      style={{ left: pct(FLOOR_BOX.x, ART_W), top: pct(FLOOR_BOX.y, ART_H), width: pct(FLOOR_BOX.w, ART_W), height: pct(FLOOR_BOX.h, ART_H) }}>
-      <img className="floor__slab" src="/assets/cockpit/floor.webp" alt="" draggable={false} />
-      <svg className="floor__inlay" viewBox={`0 0 ${FLOOR_BOX.w} ${FLOOR_BOX.h}`} preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="tp-inlay" x1="0" y1="0" x2="0.35" y2="1">
-            <stop offset="0" stopColor="#1f2022" /><stop offset="0.55" stopColor="#18191b" /><stop offset="1" stopColor="#121315" />
-          </linearGradient>
-          <filter id="tp-recess" x="-5%" y="-5%" width="110%" height="110%">
-            <feComponentTransfer in="SourceAlpha" result="out"><feFuncA type="table" tableValues="1 0" /></feComponentTransfer>
-            <feOffset in="out" dx="3" dy="6" /><feGaussianBlur stdDeviation="5" result="soft" />
-            <feFlood floodColor="#000" floodOpacity="0.85" /><feComposite in2="soft" operator="in" />
-            <feComposite in2="SourceAlpha" operator="in" result="inner" />
-            <feOffset in="SourceAlpha" dx="0" dy="2" result="lipS" />
-            <feComposite in="lipS" in2="SourceAlpha" operator="out" result="lipA" />
-            <feFlood floodColor="#fff" floodOpacity="0.28" /><feComposite in2="lipA" operator="in" result="lip" />
-            <feMerge><feMergeNode in="lip" /><feMergeNode in="SourceGraphic" /><feMergeNode in="inner" /></feMerge>
-          </filter>
-        </defs>
-        <polygon points={INLAY} fill="url(#tp-inlay)" filter="url(#tp-recess)" />
-      </svg>
-
-      <div className="floor__tabs" role="tablist">
-        {([["places", "Index"], ["layers", `Layers${ready ? ` ${ready}` : ""}`], ["key", "Key"]] as [Pane, string][]).map(([id, label]) => (
-          <button key={id} role="tab" aria-selected={pane === id} className={pane === id ? "is-active" : ""} onClick={() => setPane(id)}>{label}</button>
-        ))}
-      </div>
-
-      <div className="floor__well" style={{ clipPath: INLAY_CLIP }}>
-        <p className="floor__readout" aria-live="polite">{readout}</p>
-        <div className="floor__body">
-          {pane === "places" && (
-            <ol className="places">
-              {index.map((w, i) => (
-                <li key={w.id}>
-                  <button className={`place ${workspace?.id === w.id ? "is-active" : ""}`} onClick={() => { if (workspace?.id !== w.id) loadWorkspace(w.id); onChoose?.(w.id); }}>
-                    <span className="place__num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="place__text">
-                      <span className="place__kicker">{KICKER[w.id] ?? "Region"}</span>
-                      <span className="place__name">{w.name}</span>
-                      {w.subtitle && <span className="place__sub">{w.subtitle}</span>}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          )}
-          {pane === "layers" && <DatasetPanel />}
-          {pane === "key" && (
-            <div className="floor__key">
-              <p className="muted small">Every layer carries a badge so observation, derivation and model output are never confused.</p>
-              <ProvenanceKey />
-            </div>
-          )}
+    <section className={`console ${drag ? "is-drag" : ""}`} aria-label="Index"
+      onDragOver={(e) => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)}
+      onDrop={(e) => { e.preventDefault(); setDrag(false); if (e.dataTransfer.files.length) { addFiles(e.dataTransfer.files); setPane("layers"); } }}>
+      <header className="console__head">
+        <div className="console__tabs" role="tablist">
+          {([["places", "Places"], ["layers", `Layers${ready ? ` · ${ready}` : ""}`], ["key", "Key"]] as [Pane, string][]).map(([id, label]) => (
+            <button key={id} role="tab" aria-selected={pane === id} className={pane === id ? "is-active" : ""} onClick={() => setPane(id)}>{label}</button>
+          ))}
         </div>
+        <p className="console__readout" aria-live="polite">{readout}</p>
+      </header>
+      <div className="console__body">
+        {pane === "places" && <PlacesTable onChoose={onChoose} />}
+        {pane === "layers" && <LayersTable />}
+        {pane === "key" && <KeyTable />}
       </div>
     </section>
   );
@@ -222,7 +275,9 @@ export function IndexPanel({ onChoose, caption }: { onChoose?: (id: string) => v
 /* ---------------------------------------------------------------- top bar */
 
 export function TopBar({ onHome }: { onHome: () => void }) {
-  const { workspace, apiOnline, addFiles } = useStore();
+  const { workspace, apiOnline, addFiles, datasets, terrainId } = useStore();
+  const terrain = datasets.find((d) => d.id === terrainId);
+  const place = terrain?.origin === "upload" ? `Your data · ${terrain.name}` : workspace?.name ?? "No workspace";
   const input = useRef<HTMLInputElement>(null);
   return (
     <header className="topbar">
@@ -236,7 +291,7 @@ export function TopBar({ onHome }: { onHome: () => void }) {
         <span>TerraPulse</span>
       </button>
       <nav className="topbar__nav" aria-label="Status">
-        <span className="topbar__item">{workspace?.name ?? "No workspace"}</span>
+        <span className="topbar__item">{place}</span>
         <span className="topbar__item topbar__item--dim">NASA Space Apps 2026</span>
         <span className="topbar__item topbar__item--dim">Dancing with the SARs</span>
       </nav>

@@ -1,7 +1,10 @@
+import { EXAGGERATION_MAX, EXAGGERATION_MIN } from "./exaggeration";
 import type { ShadingMode } from "../../data/terrainTypes";
 
 interface ViewControlsProps {
   exaggeration: number;
+  /** The value picked from the terrain's relief; shown as "auto" while in use. */
+  autoExaggeration?: number;
   onExaggeration: (v: number) => void;
   shading: ShadingMode;
   onShading: (s: ShadingMode) => void;
@@ -16,7 +19,7 @@ const MODES: { id: ShadingMode; label: string }[] = [
   { id: "slope", label: "Slope" },
 ];
 
-export function ViewControls({ exaggeration, onExaggeration, shading, onShading, onReset, hires, onHires }: ViewControlsProps) {
+export function ViewControls({ exaggeration, onExaggeration, autoExaggeration, shading, onShading, onReset, hires, onHires }: ViewControlsProps) {
   return (
     <div className="view-controls">
       <div className="seg" role="radiogroup" aria-label="Terrain shading">
@@ -28,8 +31,11 @@ export function ViewControls({ exaggeration, onExaggeration, shading, onShading,
         ))}
       </div>
       <label className="view-controls__slider">
-        <span>Vertical exaggeration <b>×{exaggeration.toFixed(1)}</b></span>
-        <input type="range" min={0.5} max={4} step={0.1} value={exaggeration}
+        <span>Vertical exaggeration <b>×{exaggeration.toFixed(1)}</b>
+          {autoExaggeration !== undefined && autoExaggeration > 1.2 && Math.abs(exaggeration - autoExaggeration) < 0.05 &&
+            <em className="view-controls__auto" title="Chosen from this terrain's relief so low ground stays readable"> auto</em>}
+        </span>
+        <input type="range" min={EXAGGERATION_MIN} max={EXAGGERATION_MAX} step={0.1} value={exaggeration}
           onChange={(e) => onExaggeration(Number(e.target.value))} />
       </label>
       {onHires && (

@@ -14,10 +14,11 @@ platform also works as a static site; this API adds the Python-only parts.
 from __future__ import annotations
 
 import json
+import os
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-import os
+
 from terrapulse import __version__
 from terrapulse.tabular.inspect import inspect_file, read_tables
 from terrapulse.tabular.train import TabularTask, TaskError, train_tabular
