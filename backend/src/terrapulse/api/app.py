@@ -17,7 +17,7 @@ import json
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-
+import os
 from terrapulse import __version__
 from terrapulse.tabular.inspect import inspect_file, read_tables
 from terrapulse.tabular.train import TabularTask, TaskError, train_tabular
@@ -26,7 +26,13 @@ MAX_BYTES = 50 * 1024 * 1024
 TABLE_EXT = (".csv", ".tsv", ".tab", ".xlsx", ".xlsm", ".xls")
 
 app = FastAPI(title="TerraPulse API", version=__version__)
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+# Browsers may call the API from the local dev server and from the deployed site. Add deployed origins with
+# TERRAPULSE_CORS_ORIGINS="https://terrapulse.vercel.app,https://my-domain.org" (comma-separated), and Vercel
+# preview URLs with TERRAPULSE_CORS_REGEX="https://terrapulse-.*\.vercel\.app".
+_origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:4173"]
+_origins += [o.strip() for o in os.environ.get("TERRAPULSE_CORS_ORIGINS", "").split(",") if o.strip()]
+app.add_middleware(CORSMiddleware, allow_origins=_origins,
+                   allow_origin_regex=os.environ.get("TERRAPULSE_CORS_REGEX") or None,
                    allow_methods=["*"], allow_headers=["*"])
 
 

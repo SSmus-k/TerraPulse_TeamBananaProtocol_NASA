@@ -2,7 +2,8 @@
  * Interactive 2D map (MapLibre GL). Renders any visible dataset that can be
  * placed in lon/lat: rasters (as images), GeoJSON vectors, and table points.
  */
-import maplibregl, { type StyleSpecification } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import type { StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import type { Dataset } from "../../data/types";
