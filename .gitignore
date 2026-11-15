@@ -25,3 +25,6 @@ Thumbs.db
 .claude
 # generated outputs (recreate with: python -m terrapulse all)
 backend/reports/
+
+# demo videos are large; share them outside git (the GIF is small enough to commit)
+demo/*.mp4

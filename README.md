@@ -3,6 +3,11 @@
 **An Earth observatory for surface change: radar, terrain and imagery turned into evidence you can explore in 3D.**
 NASA Space Apps Challenge 2026 · *Dancing with the SARs* · Team Banana Protocol
 
+![TerraPulse: the Earth turns in the cockpit window, then dives into the Thame valley in 3D](demo/terrapulse-demo.gif)
+
+*Choosing a place turns the globe and dives into the 3D terrain. The full walkthrough (2:38) and the recorded Thame
+story video (1:37) are shared separately; the app records the story itself with **● Record video**.*
+
 TerraPulse ingests satellite and geospatial data, works out what each file is, proposes the right analysis and
 shows the result on a 2D map, a 3D terrain and in a recorded story video. It is data-driven, not tied to one
 place: any region can be built from free open data with one command.
